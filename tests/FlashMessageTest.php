@@ -2,6 +2,7 @@
 
 namespace Coderello\Laraflash\Tests;
 
+use Coderello\Laraflash\Exceptions\InvalidArgumentException;
 use Coderello\Laraflash\Exceptions\InvalidDelayException;
 use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
 use Coderello\Laraflash\FlashMessage;
@@ -97,5 +98,84 @@ class FlashMessageTest extends AbstractTestCase
         $messageValues = $message->toArray();
 
         $this->assertEquals(4, $messageValues['hops']);
+    }
+
+    public function test_to_array_method()
+    {
+        $message = new FlashMessage();
+        $message->title('hello')
+            ->content('world')
+            ->type('info')
+            ->hops(5)
+            ->delay(3);
+
+        $this->assertEquals([
+            'title' => 'hello',
+            'content' => 'world',
+            'type' => 'info',
+            'hops' => 5,
+            'delay' => 3,
+        ], $message->toArray());
+    }
+
+    public function test_offset_exists_method()
+    {
+        $message = new FlashMessage();
+
+        $this->assertTrue($message->offsetExists('title'));
+        $this->assertTrue($message->offsetExists('content'));
+        $this->assertTrue($message->offsetExists('type'));
+        $this->assertTrue($message->offsetExists('hops'));
+        $this->assertTrue($message->offsetExists('delay'));
+        $this->assertFalse($message->offsetExists('fail'));
+    }
+
+    public function test_offset_get_method()
+    {
+        $message = new FlashMessage();
+
+        $message->title('hello');
+
+        $this->assertEquals('hello', $message['title']);
+    }
+
+    public function test_offset_get_method_with_invalid_argument()
+    {
+        $message = new FlashMessage();
+
+        $this->expectException(InvalidArgumentException::class);
+
+        $message->offsetGet('whoops');
+    }
+
+    public function test_offset_set_method()
+    {
+        $message = new FlashMessage();
+
+        $message->offsetSet('title', 'it works');
+
+        $this->assertEquals('it works', $message['title']);
+    }
+
+    public function test_offset_set_method_with_invalid_argument()
+    {
+        $message = new FlashMessage();
+
+        $this->expectException(InvalidArgumentException::class);
+
+        $message->offsetSet('whoops', 'some value');
+    }
+
+    public function test_offset_unset_method_does_not_affect_message()
+    {
+        $message = new FlashMessage();
+
+        $message->title('hello');
+
+        $messageValues = $message->toArray();
+
+        unset($message['title']);
+
+        $this->assertSame($messageValues, $message->toArray());
     }
 }
