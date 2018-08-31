@@ -2,12 +2,19 @@
 
 namespace Coderello\Laraflash;
 
+use ArrayAccess;
+use Coderello\Laraflash\Exceptions\InvalidArgumentException;
 use Coderello\Laraflash\Exceptions\InvalidDelayException;
 use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
 use Illuminate\Contracts\Support\Arrayable;
 
-class FlashMessage implements Arrayable
+class FlashMessage implements Arrayable, ArrayAccess
 {
+    /**
+     * @var array
+     */
+    const MUTABLE_PROPERTIES = ['title', 'content', 'type', 'hops', 'delay'];
+
     /**
      * @var string|null
      */
@@ -156,12 +163,79 @@ class FlashMessage implements Arrayable
      */
     public function toArray()
     {
-        return [
-            'title' => $this->title,
-            'content' => $this->content,
-            'type' => $this->type,
-            'hops' => $this->hops,
-            'delay' => $this->delay,
-        ];
+        return array_reduce(self::MUTABLE_PROPERTIES, function (array $accumulator, string $property) {
+            $accumulator[$property] = $this->{$property};
+
+            return $accumulator;
+        }, []);
+    }
+
+    /**
+     * Whether a offset exists.
+     *
+     * @param mixed $offset
+     *
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return $this->isMutableProperty($offset);
+    }
+
+    /**
+     * Offset to retrieve.
+     *
+     * @param mixed $offset
+     *
+     * @return mixed
+     */
+    public function offsetGet($offset)
+    {
+        if (! $this->isMutableProperty($offset)) {
+            throw new InvalidArgumentException;
+        }
+
+        return $this->{$offset};
+    }
+
+    /**
+     * Offset to set.
+     *
+     * @param mixed $offset
+     * @param mixed $value
+     *
+     * @return void
+     */
+    public function offsetSet($offset, $value)
+    {
+        if (! $this->isMutableProperty($offset)) {
+            throw new InvalidArgumentException;
+        }
+
+        $this->{$offset}($value);
+    }
+
+    /**
+     * Offset to unset.
+     *
+     * @param mixed $offset
+     *
+     * @return void
+     */
+    public function offsetUnset($offset)
+    {
+        //
+    }
+
+    /**
+     * Whether a property is mutable.
+     *
+     * @param string $property
+     *
+     * @return bool
+     */
+    protected function isMutableProperty(string $property): bool
+    {
+        return in_array($property, self::MUTABLE_PROPERTIES);
     }
 }
