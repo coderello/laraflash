@@ -45,6 +45,20 @@ class FlashMessagesBag implements ArrayAccess
     }
 
     /**
+     * Add one hop to each message.
+     *
+     * @return FlashMessagesBag
+     */
+    public function keep(): self
+    {
+        foreach ($this->messages as $message) {
+            $message->keep();
+        }
+
+        return $this;
+    }
+
+    /**
      * Get all messages from the bag.
      *
      * @return FlashMessage[]

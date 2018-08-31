@@ -61,6 +61,21 @@ class FlashMessageBagTest extends AbstractTestCase
         $this->assertEquals(0, count($bag->all()));
     }
 
+    public function test_keep_method()
+    {
+        $bag = new FlashMessagesBag();
+
+        $bag->add()->hops(2);
+
+        $bag->add()->hops(6);
+
+        $bag->keep();
+
+        $this->assertEquals(3, $bag[0]['hops']);
+
+        $this->assertEquals(7, $bag[1]['hops']);
+    }
+
     public function test_all_method()
     {
         $bag = new FlashMessagesBag();
