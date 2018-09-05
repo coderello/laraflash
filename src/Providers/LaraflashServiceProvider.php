@@ -17,7 +17,11 @@ class LaraflashServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->loadViewsFrom(__DIR__.'/../../resources/views', 'laraflash');
+
+        $this->publishes([
+            __DIR__.'/../../config/laraflash.php' => config_path('laraflash.php')
+        ], 'laraflash-config');
     }
 
     /**
@@ -37,5 +41,9 @@ class LaraflashServiceProvider extends ServiceProvider
         $this->app->resolving(FlashMessagesBag::class, function (FlashMessagesBag $bag) {
             (new FlashMessagesBagPreparer($bag))->prepare();
         });
+
+        $this->mergeConfigFrom(
+            __DIR__.'/../../config/laraflash.php', 'laraflash'
+        );
     }
 }
