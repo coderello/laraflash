@@ -20,6 +20,10 @@ class LaraflashServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'laraflash');
 
         $this->publishes([
+            __DIR__.'/../../resources/views' => resource_path('views/vendor/laraflash'),
+        ], 'laraflash-views');
+
+        $this->publishes([
             __DIR__.'/../../config/laraflash.php' => config_path('laraflash.php')
         ], 'laraflash-config');
     }
