@@ -169,11 +169,33 @@ class FlashMessage implements FlashMessageContract
     }
 
     /**
+     * Data which should be serialized to JSON.
+     *
+     * @return array|mixed
+     */
+    public function jsonSerialize()
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * Convert the object to its JSON representation.
+     *
+     * @param int $options
+     *
+     * @return string
+     */
+    public function toJson($options = 0): string
+    {
+        return json_encode($this, $options);
+    }
+
+    /**
      * Get the instance as an array.
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return array_reduce(self::MUTABLE_PROPERTIES, function (array $accumulator, string $property) {
             $accumulator[$property] = $this->{$property};

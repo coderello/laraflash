@@ -125,6 +125,40 @@ class FlashMessagesBag implements FlashMessagesBagContract
     }
 
     /**
+     * Data which should be serialized to JSON.
+     *
+     * @return array|mixed
+     */
+    public function jsonSerialize()
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * Convert the object to its JSON representation.
+     *
+     * @param int $options
+     *
+     * @return string
+     */
+    public function toJson($options = 0): string
+    {
+        return json_encode($this, $options);
+    }
+
+    /**
+     * Get the instance as an array.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array_values(array_map(function (FlashMessage $message) {
+            return $message->toArray();
+        }, $this->ready()));
+    }
+
+    /**
      * Whether a offset exists.
      *
      * @param mixed $offset

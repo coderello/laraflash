@@ -4,9 +4,11 @@ namespace Coderello\Laraflash\Contracts;
 
 use Illuminate\Contracts\Support\Arrayable;
 use ArrayAccess;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Renderable;
+use JsonSerializable;
 
-interface FlashMessage extends Arrayable, ArrayAccess, Renderable
+interface FlashMessage extends Arrayable, ArrayAccess, Renderable, Jsonable, JsonSerializable
 {
     public function title(string $title): FlashMessage;
 
