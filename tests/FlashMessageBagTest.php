@@ -162,4 +162,75 @@ class FlashMessageBagTest extends AbstractTestCase
             1 => $secondMessage,
         ], $bag->all());
     }
+
+    public function test_prepare_method_hops_amount_will_not_be_decremented_if_delay_is_greater_than_zero()
+    {
+        $bag = new FlashMessagesBag();
+
+        $bag->add()->hops(2)->delay(2);
+
+        $bag->prepare();
+
+        $this->assertSame(2, $bag[0]->toArray()['hops']);
+
+        $bag->prepare();
+
+        $this->assertSame(2, $bag[0]->toArray()['hops']);
+    }
+
+    public function test_prepare_method_hops_amount_will_be_decremented_if_delay_is_zero()
+    {
+        $bag = new FlashMessagesBag();
+
+        $bag->add()->hops(5)->delay(0);
+
+        $bag->prepare();
+
+        $this->assertSame(4, $bag[0]->toArray()['hops']);
+
+        $bag->prepare();
+
+        $this->assertSame(3, $bag[0]->toArray()['hops']);
+    }
+
+    public function test_prepare_method_delay_will_be_decremented_if_it_is_greater_than_zero()
+    {
+        $bag = new FlashMessagesBag();
+
+        $bag->add()->hops(4)->delay(2);
+
+        $bag->prepare();
+
+        $this->assertSame(1, $bag[0]->toArray()['delay']);
+
+        $bag->prepare();
+
+        $this->assertSame(0, $bag[0]->toArray()['delay']);
+    }
+
+    public function test_prepare_method_delay_will_not_be_decremented_if_it_is_zero()
+    {
+        $bag = new FlashMessagesBag();
+
+        $bag->add()->hops(6)->delay(0);
+
+        $bag->prepare();
+
+        $this->assertSame(0, $bag[0]->toArray()['delay']);
+
+        $bag->prepare();
+
+        $this->assertSame(0, $bag[0]->toArray()['delay']);
+    }
+
+    public function test_prepare_method_message_will_be_deleted_if_hops_amount_is_less_or_equal_to_one_and_delay_is_zero()
+    {
+        $bag = new FlashMessagesBag();
+
+        $bag->add()->hops(1)->delay(0);
+
+        $bag->prepare();
+
+        $this->assertFalse(isset($bag[0]));
+    }
 }

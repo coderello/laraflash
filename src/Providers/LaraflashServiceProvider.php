@@ -3,7 +3,6 @@
 namespace Coderello\Laraflash\Providers;
 
 use Coderello\Laraflash\FlashMessagesBag;
-use Coderello\Laraflash\FlashMessagesBagPreparer;
 use Coderello\Laraflash\FlashMessagesBagResolver;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\ServiceProvider;
@@ -43,7 +42,7 @@ class LaraflashServiceProvider extends ServiceProvider
         });
 
         $this->app->resolving(FlashMessagesBag::class, function (FlashMessagesBag $bag) {
-            (new FlashMessagesBagPreparer($bag))->prepare();
+            $bag->prepare();
         });
 
         $this->mergeConfigFrom(

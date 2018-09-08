@@ -81,6 +81,34 @@ class FlashMessagesBag implements ArrayAccess
     }
 
     /**
+     * Prepare the bag before use (decrement amount of hops and delay, delete expired messages).
+     *
+     * @return FlashMessagesBag
+     */
+    public function prepare(): self
+    {
+        foreach ($this->messages as $key => $message) {
+            if ($message['hops'] <= 1 && $message['delay'] === 0) {
+                unset($this->messages[$key]);
+
+                continue;
+            }
+
+            if ($message['hops'] > 1 && $message['delay'] === 0) {
+                $message->hops($message['hops'] - 1);
+
+                continue;
+            }
+
+            if ($message['delay'] > 0) {
+                $message->delay($message['delay'] - 1);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Whether a offset exists.
      *
      * @param mixed $offset
