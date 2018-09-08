@@ -2,10 +2,9 @@
 
 namespace Coderello\Laraflash\Facades;
 
-use Coderello\Laraflash\Laraflash;
 use Illuminate\Support\Facades\Facade;
 
-class LaraflashFacade extends Facade
+class Laraflash extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -14,6 +13,6 @@ class LaraflashFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return Laraflash::class;
+        return 'laraflash.bag';
     }
 }

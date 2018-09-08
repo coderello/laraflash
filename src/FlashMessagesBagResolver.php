@@ -3,8 +3,10 @@
 namespace Coderello\Laraflash;
 
 use Illuminate\Contracts\Session\Session;
+use Coderello\Laraflash\Contracts\FlashMessagesBag;
+use Coderello\Laraflash\Contracts\FlashMessagesBagResolver as FlashMessagesBagResolverContract;
 
-class FlashMessagesBagResolver
+class FlashMessagesBagResolver implements FlashMessagesBagResolverContract
 {
     /**
      * FlashMessagesBag instance.
@@ -24,7 +26,7 @@ class FlashMessagesBagResolver
         $bag = $session->get($sessionKey);
 
         if (is_null($bag) || ! is_object($bag) || ! $bag instanceof FlashMessagesBag) {
-            $bag = new FlashMessagesBag;
+            $bag = app(FlashMessagesBag::class);
 
             $session->put($sessionKey, $bag);
         }

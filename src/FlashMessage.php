@@ -2,13 +2,12 @@
 
 namespace Coderello\Laraflash;
 
-use ArrayAccess;
 use Coderello\Laraflash\Exceptions\InvalidArgumentException;
 use Coderello\Laraflash\Exceptions\InvalidDelayException;
 use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
-use Illuminate\Contracts\Support\Arrayable;
+use Coderello\Laraflash\Contracts\FlashMessage as FlashMessageContract;
 
-class FlashMessage implements Arrayable, ArrayAccess
+class FlashMessage implements FlashMessageContract
 {
     /**
      * @var array
@@ -57,7 +56,7 @@ class FlashMessage implements Arrayable, ArrayAccess
      *
      * @return FlashMessage
      */
-    public function title(string $title): self
+    public function title(string $title): FlashMessageContract
     {
         $this->title = $title;
 
@@ -71,7 +70,7 @@ class FlashMessage implements Arrayable, ArrayAccess
      *
      * @return FlashMessage
      */
-    public function content(string $content): self
+    public function content(string $content): FlashMessageContract
     {
         $this->content = $content;
 
@@ -85,7 +84,7 @@ class FlashMessage implements Arrayable, ArrayAccess
      *
      * @return FlashMessage
      */
-    public function type(string $type): self
+    public function type(string $type): FlashMessageContract
     {
         $this->type = $type;
 
@@ -101,7 +100,7 @@ class FlashMessage implements Arrayable, ArrayAccess
      *
      * @return FlashMessage
      */
-    public function hops(int $hops): self
+    public function hops(int $hops): FlashMessageContract
     {
         if ($hops < 1) {
             throw new InvalidHopsAmountException;
@@ -121,7 +120,7 @@ class FlashMessage implements Arrayable, ArrayAccess
      *
      * @return FlashMessage
      */
-    public function delay(int $delay): self
+    public function delay(int $delay): FlashMessageContract
     {
         if ($delay < 0) {
             throw new InvalidDelayException;
@@ -137,7 +136,7 @@ class FlashMessage implements Arrayable, ArrayAccess
      *
      * @return FlashMessage
      */
-    public function now(): self
+    public function now(): FlashMessageContract
     {
         $this->delay(0);
 
@@ -149,7 +148,7 @@ class FlashMessage implements Arrayable, ArrayAccess
      *
      * @return FlashMessage
      */
-    public function keep(): self
+    public function keep(): FlashMessageContract
     {
         $this->hops++;
 

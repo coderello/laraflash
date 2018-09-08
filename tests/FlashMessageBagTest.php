@@ -7,9 +7,15 @@ use Coderello\Laraflash\Exceptions\InvalidArgumentException;
 use Coderello\Laraflash\FlashMessage;
 use Coderello\Laraflash\FlashMessagesBag;
 use ErrorException;
+use Coderello\Laraflash\Contracts\FlashMessagesBag as FlashMessagesBagContract;
 
 class FlashMessageBagTest extends AbstractTestCase
 {
+    public function test_implements_contract()
+    {
+        $this->assertTrue(new FlashMessagesBag instanceof FlashMessagesBagContract);
+    }
+
     public function test_initial_state()
     {
         $bag = new FlashMessagesBag();

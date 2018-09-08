@@ -2,10 +2,11 @@
 
 namespace Coderello\Laraflash;
 
-use ArrayAccess;
+use Coderello\Laraflash\Contracts\FlashMessagesBag as FlashMessagesBagContract;
 use Coderello\Laraflash\Exceptions\InvalidArgumentException;
+use Coderello\Laraflash\Contracts\FlashMessage;
 
-class FlashMessagesBag implements ArrayAccess
+class FlashMessagesBag implements FlashMessagesBagContract
 {
     /**
      * An array for storing bag items.
@@ -24,7 +25,7 @@ class FlashMessagesBag implements ArrayAccess
     public function add(?FlashMessage $message = null): FlashMessage
     {
         if (is_null($message)) {
-            $message = new FlashMessage;
+            $message = app(FlashMessage::class);
         }
 
         $this->messages[] = $message;
@@ -35,9 +36,9 @@ class FlashMessagesBag implements ArrayAccess
     /**
      * Delete all instances of FlashMessage from the bag.
      *
-     * @return FlashMessagesBag
+     * @return FlashMessagesBagContract
      */
-    public function clear(): self
+    public function clear(): FlashMessagesBagContract
     {
         $this->messages = [];
 
@@ -47,9 +48,9 @@ class FlashMessagesBag implements ArrayAccess
     /**
      * Add one hop to each message.
      *
-     * @return FlashMessagesBag
+     * @return FlashMessagesBagContract
      */
-    public function keep(): self
+    public function keep(): FlashMessagesBagContract
     {
         foreach ($this->messages as $message) {
             $message->keep();
@@ -63,7 +64,7 @@ class FlashMessagesBag implements ArrayAccess
      *
      * @return FlashMessage[]
      */
-    public function all()
+    public function all(): array
     {
         return $this->messages;
     }
@@ -73,7 +74,7 @@ class FlashMessagesBag implements ArrayAccess
      *
      * @return FlashMessage[]
      */
-    public function ready()
+    public function ready(): array
     {
         return array_filter($this->messages, function (FlashMessage $message) {
             return $message->toArray()['delay'] === 0;
@@ -83,9 +84,9 @@ class FlashMessagesBag implements ArrayAccess
     /**
      * Prepare the bag before use (decrement amount of hops and delay, delete expired messages).
      *
-     * @return FlashMessagesBag
+     * @return FlashMessagesBagContract
      */
-    public function prepare(): self
+    public function prepare(): FlashMessagesBagContract
     {
         foreach ($this->messages as $key => $message) {
             if ($message['hops'] <= 1 && $message['delay'] === 0) {

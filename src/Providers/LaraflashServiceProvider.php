@@ -2,10 +2,14 @@
 
 namespace Coderello\Laraflash\Providers;
 
+use Coderello\Laraflash\FlashMessage;
 use Coderello\Laraflash\FlashMessagesBag;
 use Coderello\Laraflash\FlashMessagesBagResolver;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\ServiceProvider;
+use Coderello\Laraflash\Contracts\FlashMessage as FlashMessageContract;
+use Coderello\Laraflash\Contracts\FlashMessagesBag as FlashMessagesBagContract;
+use Coderello\Laraflash\Contracts\FlashMessagesBagResolver as FlashMessagesBagResolverContract;
 
 class LaraflashServiceProvider extends ServiceProvider
 {
@@ -34,14 +38,18 @@ class LaraflashServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(FlashMessagesBag::class, function () {
-            return (new FlashMessagesBagResolver(
-                $this->app->make(Session::class),
-                'flash_messages_bag'
-            ))->bag();
+        $this->app->bind(FlashMessagesBagContract::class, FlashMessagesBag::class);
+        $this->app->bind(FlashMessageContract::class, FlashMessage::class);
+        $this->app->bind(FlashMessagesBagResolverContract::class, FlashMessagesBagResolver::class);
+
+        $this->app->singleton('laraflash.bag', function () {
+            return $this->app->make(FlashMessagesBagResolverContract::class, [
+                'session' => $this->app->make(Session::class),
+                'sessionKey' => 'flash_messages_bag',
+            ])->bag();
         });
 
-        $this->app->resolving(FlashMessagesBag::class, function (FlashMessagesBag $bag) {
+        $this->app->resolving('laraflash.bag', function (FlashMessagesBagContract $bag) {
             $bag->prepare();
         });
 

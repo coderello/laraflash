@@ -6,9 +6,15 @@ use Coderello\Laraflash\Exceptions\InvalidArgumentException;
 use Coderello\Laraflash\Exceptions\InvalidDelayException;
 use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
 use Coderello\Laraflash\FlashMessage;
+use Coderello\Laraflash\Contracts\FlashMessage as FlashMessageContract;
 
 class FlashMessageTest extends AbstractTestCase
 {
+    public function test_implements_contract()
+    {
+        $this->assertTrue(new FlashMessage instanceof FlashMessageContract);
+    }
+
     public function test_initial_state()
     {
         $message = new FlashMessage();

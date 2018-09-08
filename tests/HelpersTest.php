@@ -2,12 +2,10 @@
 
 namespace Coderello\Laraflash\Tests;
 
-use Coderello\Laraflash\Laraflash;
-
 class HelpersTest extends AbstractTestCase
 {
-    public function test_laraflash_helper_returns_laraflash_object()
+    public function test_laraflash_helper_returns_appropriate_object()
     {
-        $this->assertTrue(laraflash() instanceof Laraflash);
+        $this->assertSame(app('laraflash.bag'), laraflash());
     }
 }

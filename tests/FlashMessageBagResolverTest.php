@@ -6,10 +6,18 @@ use Coderello\Laraflash\FlashMessagesBag;
 use Coderello\Laraflash\FlashMessagesBagResolver;
 use DateTime;
 use Illuminate\Contracts\Session\Session;
+use Coderello\Laraflash\Contracts\FlashMessagesBagResolver as FlashMessagesBagResolverContract;
 
 class FlashMessageBagResolverTest extends AbstractTestCase
 {
     protected $sessionKey = 'flash_messages_bag';
+
+    public function test_implements_contract()
+    {
+        $session = app(Session::class);
+
+        $this->assertTrue(new FlashMessagesBagResolver($session, $this->sessionKey) instanceof FlashMessagesBagResolverContract);
+    }
 
     public function test_bag_resolving_with_null_value_in_session()
     {

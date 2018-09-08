@@ -1,13 +1,13 @@
 <?php
 
-use Coderello\Laraflash\Laraflash;
+use Coderello\Laraflash\Contracts\FlashMessagesBag;
 
 if (! function_exists('laraflash')) {
     /**
-     * @return Laraflash
+     * @return FlashMessagesBag
      */
-    function laraflash(): Laraflash
+    function laraflash(): FlashMessagesBag
     {
-        return app()->make(Laraflash::class);
+        return app('laraflash.bag');
     }
 }
