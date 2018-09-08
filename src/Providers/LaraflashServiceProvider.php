@@ -20,7 +20,7 @@ class LaraflashServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/../../resources/views', 'laraflash');
+        $this->loadViewsFrom(__DIR__ . '/../../resources/views/components/skins', 'laraflash_skin');
 
         $this->publishes([
             __DIR__.'/../../resources/views' => resource_path('views/vendor/laraflash'),
