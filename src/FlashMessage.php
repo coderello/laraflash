@@ -6,6 +6,7 @@ use Coderello\Laraflash\Exceptions\InvalidArgumentException;
 use Coderello\Laraflash\Exceptions\InvalidDelayException;
 use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
 use Coderello\Laraflash\Contracts\FlashMessage as FlashMessageContract;
+use Throwable;
 
 class FlashMessage implements FlashMessageContract
 {
@@ -153,6 +154,18 @@ class FlashMessage implements FlashMessageContract
         $this->hops++;
 
         return $this;
+    }
+
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     *
+     * @throws Throwable
+     */
+    public function render(): string
+    {
+        return view(config('laraflash.skin'), $this->toArray())->render();
     }
 
     /**

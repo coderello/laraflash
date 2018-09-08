@@ -5,6 +5,7 @@ namespace Coderello\Laraflash;
 use Coderello\Laraflash\Contracts\FlashMessagesBag as FlashMessagesBagContract;
 use Coderello\Laraflash\Exceptions\InvalidArgumentException;
 use Coderello\Laraflash\Contracts\FlashMessage;
+use Throwable;
 
 class FlashMessagesBag implements FlashMessagesBagContract
 {
@@ -107,6 +108,20 @@ class FlashMessagesBag implements FlashMessagesBagContract
         }
 
         return $this;
+    }
+
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     *
+     * @throws Throwable
+     */
+    public function render(): string
+    {
+        return implode(config('laraflash.separator'), array_map(function (FlashMessage $message) {
+            return $message->render();
+        }, $this->ready()));
     }
 
     /**

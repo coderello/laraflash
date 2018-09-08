@@ -3,8 +3,9 @@
 namespace Coderello\Laraflash\Contracts;
 
 use ArrayAccess;
+use Illuminate\Contracts\Support\Renderable;
 
-interface FlashMessagesBag extends ArrayAccess
+interface FlashMessagesBag extends ArrayAccess, Renderable
 {
     public function add(?FlashMessage $message = null): FlashMessage;
 
