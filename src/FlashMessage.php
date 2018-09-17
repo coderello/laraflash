@@ -13,7 +13,7 @@ class FlashMessage implements FlashMessageContract
     /**
      * @var array
      */
-    const MUTABLE_PROPERTIES = ['title', 'content', 'type', 'hops', 'delay'];
+    const MUTABLE_PROPERTIES = ['title', 'content', 'type', 'hops', 'delay', 'important'];
 
     /**
      * @var string|null
@@ -41,6 +41,11 @@ class FlashMessage implements FlashMessageContract
     protected $delay;
 
     /**
+     * @var bool|null
+     */
+    protected $important;
+
+    /**
      * FlashMessage constructor.
      */
     public function __construct()
@@ -48,6 +53,8 @@ class FlashMessage implements FlashMessageContract
         $this->hops(1);
 
         $this->delay(1);
+
+        $this->important(false);
     }
 
     /**
@@ -128,6 +135,20 @@ class FlashMessage implements FlashMessageContract
         }
 
         $this->delay = $delay;
+
+        return $this;
+    }
+
+    /**
+     * Set the important flag for the current FlashMessage instance.
+     *
+     * @param bool $important
+     *
+     * @return FlashMessage
+     */
+    public function important(bool $important = true): FlashMessageContract
+    {
+        $this->important = $important;
 
         return $this;
     }

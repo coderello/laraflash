@@ -25,6 +25,7 @@ class FlashMessageTest extends AbstractTestCase
         $this->assertEquals(null, $messageValues['type']);
         $this->assertEquals(1, $messageValues['hops']);
         $this->assertEquals(1, $messageValues['delay']);
+        $this->assertEquals(false, $messageValues['important']);
     }
 
     public function test_title_method()
@@ -88,6 +89,23 @@ class FlashMessageTest extends AbstractTestCase
         $message->delay(-1);
     }
 
+    public function test_important_method()
+    {
+        $message = new FlashMessage();
+
+        $message->important();
+
+        $this->assertEquals(true, $message['important']);
+
+        $message->important(false);
+
+        $this->assertEquals(false, $message['important']);
+
+        $message->important(true);
+
+        $this->assertEquals(true, $message['important']);
+    }
+
     public function test_now_method()
     {
         $message = new FlashMessage();
@@ -113,7 +131,8 @@ class FlashMessageTest extends AbstractTestCase
             ->content('world')
             ->type('info')
             ->hops(5)
-            ->delay(3);
+            ->delay(3)
+            ->important();
 
         $this->assertEquals([
             'title' => 'hello',
@@ -121,6 +140,7 @@ class FlashMessageTest extends AbstractTestCase
             'type' => 'info',
             'hops' => 5,
             'delay' => 3,
+            'important' => true,
         ], $message->toArray());
     }
 

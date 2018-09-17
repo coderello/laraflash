@@ -20,6 +20,8 @@ interface FlashMessage extends Arrayable, ArrayAccess, Renderable, Jsonable, Jso
 
     public function delay(int $delay): FlashMessage;
 
+    public function important(bool $important): FlashMessage;
+
     public function now(): FlashMessage;
 
     public function keep(): FlashMessage;
