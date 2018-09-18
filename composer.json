@@ -1,12 +1,12 @@
 {
     "name": "coderello/laraflash",
     "description": "Advanced flash messages for Laravel.",
-    "keywords": ["laravel", "advanced", "flash", "messages"],
+    "keywords": ["laraflash", "laravel", "advanced", "flash", "messages"],
     "type": "library",
     "license": "MIT",
     "require": {
         "php": ">=7.1",
-        "laravel/framework": "5.5.*|5.6.*"
+        "laravel/framework": "5.5.*|5.6.*|5.7.*"
     },
     "require-dev": {
         "orchestra/testbench": "~3.0"
