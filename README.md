@@ -137,11 +137,11 @@ Converts the bag to its array representation.
 
 Sets the title of the message.
 
-### content(string $content)
+#### content(string $content)
 
 Sets the content of the message.
 
-### type(string $type)
+#### type(string $type)
 
 Sets the type of the message.
 
