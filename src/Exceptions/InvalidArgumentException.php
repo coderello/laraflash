@@ -6,5 +6,4 @@ use InvalidArgumentException as NativeInvalidArgumentException;
 
 class InvalidArgumentException extends NativeInvalidArgumentException
 {
-
 }

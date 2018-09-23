@@ -54,7 +54,8 @@ class LaraflashServiceProvider extends ServiceProvider
         });
 
         $this->mergeConfigFrom(
-            __DIR__.'/../../config/laraflash.php', 'laraflash'
+            __DIR__.'/../../config/laraflash.php',
+            'laraflash'
         );
     }
 }
