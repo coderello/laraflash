@@ -38,4 +38,20 @@ return [
 
     'separator' => '<br>',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Default Values For The Flash Message
+    |--------------------------------------------------------------------------
+    |
+    | This value is an array with default values for the flash message.
+    |
+    */
+    'defaults' => [
+        // 'title' => 'Default title',
+        // 'content' => 'Default content',
+        'hops' => 1,
+        'delay' => 1,
+        'important' => false,
+    ],
+
 ];

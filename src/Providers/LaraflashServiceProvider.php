@@ -39,7 +39,17 @@ class LaraflashServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(FlashMessagesBagContract::class, FlashMessagesBag::class);
+
         $this->app->bind(FlashMessageContract::class, FlashMessage::class);
+
+        $this->app->resolving(FlashMessageContract::class, function (FlashMessageContract $message) {
+            foreach ((array) config('laraflash.defaults') as $key => $value) {
+                if (! is_null($value)) {
+                    $message[$key] = $value;
+                }
+            }
+        });
+
         $this->app->bind(FlashMessagesBagResolverContract::class, FlashMessagesBagResolver::class);
 
         $this->app->singleton('laraflash.bag', function () {
