@@ -49,6 +49,7 @@ return [
     'defaults' => [
         // 'title' => 'Default title',
         // 'content' => 'Default content',
+        'type' => 'info',
         'hops' => 1,
         'delay' => 1,
         'important' => false,
