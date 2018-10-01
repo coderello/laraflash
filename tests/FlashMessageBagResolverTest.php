@@ -2,10 +2,10 @@
 
 namespace Coderello\Laraflash\Tests;
 
-use Coderello\Laraflash\FlashMessagesBag;
-use Coderello\Laraflash\FlashMessagesBagResolver;
 use DateTime;
+use Coderello\Laraflash\FlashMessagesBag;
 use Illuminate\Contracts\Session\Session;
+use Coderello\Laraflash\FlashMessagesBagResolver;
 use Coderello\Laraflash\Contracts\FlashMessagesBagResolver as FlashMessagesBagResolverContract;
 
 class FlashMessageBagResolverTest extends AbstractTestCase

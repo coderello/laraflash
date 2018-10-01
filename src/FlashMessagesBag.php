@@ -2,10 +2,10 @@
 
 namespace Coderello\Laraflash;
 
-use Coderello\Laraflash\Contracts\FlashMessagesBag as FlashMessagesBagContract;
-use Coderello\Laraflash\Exceptions\InvalidArgumentException;
-use Coderello\Laraflash\Contracts\FlashMessage;
 use Throwable;
+use Coderello\Laraflash\Contracts\FlashMessage;
+use Coderello\Laraflash\Exceptions\InvalidArgumentException;
+use Coderello\Laraflash\Contracts\FlashMessagesBag as FlashMessagesBagContract;
 
 class FlashMessagesBag implements FlashMessagesBagContract
 {

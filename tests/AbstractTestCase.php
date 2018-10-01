@@ -2,8 +2,8 @@
 
 namespace Coderello\Laraflash\Tests;
 
-use Coderello\Laraflash\Providers\LaraflashServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
+use Coderello\Laraflash\Providers\LaraflashServiceProvider;
 
 abstract class AbstractTestCase extends OrchestraTestCase
 {
