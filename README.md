@@ -2,6 +2,14 @@
 
 <p align="center"><b>Laraflash</b> provides a handy way to work with the flash messages.</p>
 
+<p align="center">
+  <a href="https://github.com/coderello/laraflash/releases"><img src="https://img.shields.io/github/release/coderello/laraflash.svg?style=flat-square" alt="Latest Version"></a>
+  <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="Software License"></a>
+  <a href="https://styleci.io/repos/149364639"><img src="https://styleci.io/repos/149364639/shield" alt="StyleCI"></a>
+  <a href="https://scrutinizer-ci.com/g/coderello/laraflash"><img src="https://img.shields.io/scrutinizer/g/coderello/laraflash.svg?style=flat-square" alt="Quality Score"></a>
+  <a href="https://scrutinizer-ci.com/g/coderello/laraflash/code-structure"><img src="https://img.shields.io/scrutinizer/coverage/g/coderello/laraflash.svg?style=flat-square" alt="Coverage Status"></a>
+</p>
+
 ## Installation
 
 You can install this package via composer using this command:
