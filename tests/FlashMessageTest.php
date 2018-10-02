@@ -2,10 +2,10 @@
 
 namespace Coderello\Laraflash\Tests;
 
-use Coderello\Laraflash\Exceptions\InvalidArgumentException;
-use Coderello\Laraflash\Exceptions\InvalidDelayException;
-use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
 use Coderello\Laraflash\FlashMessage;
+use Coderello\Laraflash\Exceptions\InvalidDelayException;
+use Coderello\Laraflash\Exceptions\InvalidArgumentException;
+use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
 use Coderello\Laraflash\Contracts\FlashMessage as FlashMessageContract;
 
 class FlashMessageTest extends AbstractTestCase
@@ -203,5 +203,14 @@ class FlashMessageTest extends AbstractTestCase
         unset($message['title']);
 
         $this->assertSame($messageValues, $message->toArray());
+    }
+
+    public function test_to_json_method()
+    {
+        $message = new FlashMessage();
+
+        $json = $message->toJson();
+
+        $this->assertSame($message->toArray(), json_decode($json, true));
     }
 }
