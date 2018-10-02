@@ -282,6 +282,5 @@ class FlashMessageBagTest extends AbstractTestCase
         $this->assertSame($defaults['type'], $array[0]['type']);
         $this->assertSame($defaults['hops'], $array[0]['hops']);
         $this->assertSame($defaults['important'], $array[0]['important']);
-
     }
 }
