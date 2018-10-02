@@ -204,4 +204,13 @@ class FlashMessageTest extends AbstractTestCase
 
         $this->assertSame($messageValues, $message->toArray());
     }
+
+    public function test_to_json_method()
+    {
+        $message = new FlashMessage();
+
+        $json = $message->toJson();
+
+        $this->assertSame($message->toArray(), json_decode($json, true));
+    }
 }
