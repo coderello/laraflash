@@ -3,10 +3,10 @@
 namespace Coderello\Laraflash\Tests;
 
 use ArrayAccess;
-use Coderello\Laraflash\Exceptions\InvalidArgumentException;
+use ErrorException;
 use Coderello\Laraflash\FlashMessage;
 use Coderello\Laraflash\FlashMessagesBag;
-use ErrorException;
+use Coderello\Laraflash\Exceptions\InvalidArgumentException;
 use Coderello\Laraflash\Contracts\FlashMessagesBag as FlashMessagesBagContract;
 
 class FlashMessageBagTest extends AbstractTestCase
@@ -238,5 +238,49 @@ class FlashMessageBagTest extends AbstractTestCase
         $bag->prepare();
 
         $this->assertFalse(isset($bag[0]));
+    }
+
+    public function test_render_method()
+    {
+        $bag = new FlashMessagesBag();
+
+        $bag->add()->title('Title')->content('Content')->now();
+
+        $expected = '<div class="bg-info-lightest border-l-4 border-info text-info-dark p-4" role="alert">
+    <p class="font-bold">Title</p>
+    <p>Content</p>
+</div>';
+
+        $this->assertSame($expected, $bag->render());
+    }
+
+    public function test_to_json_method()
+    {
+        $bag = new FlashMessagesBag();
+
+        $bag->add()->now();
+
+        $json = $bag->toJson();
+
+        $this->assertSame($bag->toArray(), json_decode($json, true));
+    }
+
+    public function test_to_array_method()
+    {
+        $bag = new FlashMessagesBag();
+
+        $bag->add()->now();
+
+        $array = $bag->toArray();
+
+        $this->assertCount(1, $array);
+
+        $defaults = config('laraflash.defaults');
+        $this->assertNull($array[0]['title']);
+        $this->assertNull($array[0]['content']);
+        $this->assertSame(0, $array[0]['delay']);
+        $this->assertSame($defaults['type'], $array[0]['type']);
+        $this->assertSame($defaults['hops'], $array[0]['hops']);
+        $this->assertSame($defaults['important'], $array[0]['important']);
     }
 }
