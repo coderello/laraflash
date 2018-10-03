@@ -280,7 +280,7 @@ class FlashMessageBagTest extends AbstractTestCase
             'type' => 'info',
             'hops' => 2,
             'delay' => 0,
-            'important' => false
+            'important' => false,
         ], $bag->toArray()[0]);
     }
 
