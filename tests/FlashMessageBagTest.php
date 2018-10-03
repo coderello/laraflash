@@ -301,6 +301,7 @@ class FlashMessageBagTest extends AbstractTestCase
                 ])->render(),
                 $bag->render()
             );
-        } catch (\Throwable $e) {}
+        } catch (\Throwable $e) {
+        }
     }
 }

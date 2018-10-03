@@ -246,6 +246,7 @@ class FlashMessageTest extends AbstractTestCase
                 ])->render(),
                 $message->render()
             );
-        } catch (\Throwable $e) {}
+        } catch (\Throwable $e) {
+        }
     }
 }
