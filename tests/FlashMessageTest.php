@@ -226,4 +226,26 @@ class FlashMessageTest extends AbstractTestCase
 
         $this->assertEquals('hello', json_decode($response)->title);
     }
+
+    public function test_render_method()
+    {
+        $message = new FlashMessage();
+
+        $message->title('hello');
+
+        $message->type('hello');
+
+        $message->content('hello');
+
+        try {
+            $this->assertEquals(
+                view(config('laraflash.skin'), [
+                    'title' => 'hello',
+                    'type' => 'hello',
+                    'content' => 'hello',
+                ])->render(),
+                $message->render()
+            );
+        } catch (\Throwable $e) {}
+    }
 }

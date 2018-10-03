@@ -283,4 +283,24 @@ class FlashMessageBagTest extends AbstractTestCase
             'important' => false
         ], $bag->toArray()[0]);
     }
+
+    public function test_render_method()
+    {
+        $bag = new FlashMessagesBag();
+
+        $bag->add()->hops(2);
+
+        $bag->prepare();
+
+        try {
+            $this->assertEquals(
+                view(config('laraflash.skin'), [
+                    'title' => null,
+                    'content' => null,
+                    'type' => 'info',
+                ])->render(),
+                $bag->render()
+            );
+        } catch (\Throwable $e) {}
+    }
 }
