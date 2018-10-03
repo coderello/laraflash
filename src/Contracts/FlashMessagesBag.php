@@ -3,10 +3,10 @@
 namespace Coderello\Laraflash\Contracts;
 
 use ArrayAccess;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Contracts\Support\Renderable;
 use JsonSerializable;
+use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Renderable;
 
 interface FlashMessagesBag extends Arrayable, ArrayAccess, Renderable, Jsonable, JsonSerializable
 {

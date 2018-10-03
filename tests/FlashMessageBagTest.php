@@ -3,10 +3,10 @@
 namespace Coderello\Laraflash\Tests;
 
 use ArrayAccess;
-use Coderello\Laraflash\Exceptions\InvalidArgumentException;
+use ErrorException;
 use Coderello\Laraflash\FlashMessage;
 use Coderello\Laraflash\FlashMessagesBag;
-use ErrorException;
+use Coderello\Laraflash\Exceptions\InvalidArgumentException;
 use Coderello\Laraflash\Contracts\FlashMessagesBag as FlashMessagesBagContract;
 
 class FlashMessageBagTest extends AbstractTestCase

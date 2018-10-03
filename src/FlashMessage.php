@@ -2,11 +2,11 @@
 
 namespace Coderello\Laraflash;
 
-use Coderello\Laraflash\Exceptions\InvalidArgumentException;
+use Throwable;
 use Coderello\Laraflash\Exceptions\InvalidDelayException;
+use Coderello\Laraflash\Exceptions\InvalidArgumentException;
 use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
 use Coderello\Laraflash\Contracts\FlashMessage as FlashMessageContract;
-use Throwable;
 
 class FlashMessage implements FlashMessageContract
 {

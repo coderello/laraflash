@@ -2,27 +2,27 @@
 
 namespace Coderello\Laraflash\Contracts;
 
-use Illuminate\Contracts\Support\Arrayable;
 use ArrayAccess;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Contracts\Support\Renderable;
 use JsonSerializable;
+use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Renderable;
 
 interface FlashMessage extends Arrayable, ArrayAccess, Renderable, Jsonable, JsonSerializable
 {
-    public function title(string $title): FlashMessage;
+    public function title(string $title): self;
 
-    public function content(string $content): FlashMessage;
+    public function content(string $content): self;
 
-    public function type(string $type): FlashMessage;
+    public function type(string $type): self;
 
-    public function hops(int $hops): FlashMessage;
+    public function hops(int $hops): self;
 
-    public function delay(int $delay): FlashMessage;
+    public function delay(int $delay): self;
 
-    public function important(bool $important): FlashMessage;
+    public function important(bool $important): self;
 
-    public function now(): FlashMessage;
+    public function now(): self;
 
-    public function keep(): FlashMessage;
+    public function keep(): self;
 }

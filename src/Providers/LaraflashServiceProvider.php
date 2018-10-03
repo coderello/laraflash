@@ -3,10 +3,10 @@
 namespace Coderello\Laraflash\Providers;
 
 use Coderello\Laraflash\FlashMessage;
-use Coderello\Laraflash\FlashMessagesBag;
-use Coderello\Laraflash\FlashMessagesBagResolver;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\ServiceProvider;
+use Coderello\Laraflash\FlashMessagesBag;
+use Illuminate\Contracts\Session\Session;
+use Coderello\Laraflash\FlashMessagesBagResolver;
 use Coderello\Laraflash\Contracts\FlashMessage as FlashMessageContract;
 use Coderello\Laraflash\Contracts\FlashMessagesBag as FlashMessagesBagContract;
 use Coderello\Laraflash\Contracts\FlashMessagesBagResolver as FlashMessagesBagResolverContract;
@@ -20,14 +20,14 @@ class LaraflashServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views/components/skins', 'laraflash_skin');
+        $this->loadViewsFrom(__DIR__.'/../../resources/views/components/skins', 'laraflash_skin');
 
         $this->publishes([
             __DIR__.'/../../resources/views' => resource_path('views/vendor/laraflash'),
         ], 'laraflash-views');
 
         $this->publishes([
-            __DIR__.'/../../config/laraflash.php' => config_path('laraflash.php')
+            __DIR__.'/../../config/laraflash.php' => config_path('laraflash.php'),
         ], 'laraflash-config');
     }
 
