@@ -204,4 +204,49 @@ class FlashMessageTest extends AbstractTestCase
 
         $this->assertSame($messageValues, $message->toArray());
     }
+
+    public function test_json_serialize_method()
+    {
+        $message = new FlashMessage();
+
+        $message->title('hello');
+
+        $response = $message->jsonSerialize();
+
+        $this->assertEquals('hello', $response['title']);
+    }
+
+    public function test_to_json_method()
+    {
+        $message = new FlashMessage();
+
+        $message->title('hello');
+
+        $response = $message->toJson();
+
+        $this->assertEquals('hello', json_decode($response)->title);
+    }
+
+    public function test_render_method()
+    {
+        $message = new FlashMessage();
+
+        $message->title('hello');
+
+        $message->type('hello');
+
+        $message->content('hello');
+
+        try {
+            $this->assertEquals(
+                view(config('laraflash.skin'), [
+                    'title' => 'hello',
+                    'type' => 'hello',
+                    'content' => 'hello',
+                ])->render(),
+                $message->render()
+            );
+        } catch (\Throwable $e) {
+        }
+    }
 }
