@@ -204,4 +204,26 @@ class FlashMessageTest extends AbstractTestCase
 
         $this->assertSame($messageValues, $message->toArray());
     }
+
+    public function test_json_serialize_method()
+    {
+        $message = new FlashMessage();
+
+        $message->title('hello');
+
+        $response = $message->jsonSerialize();
+
+        $this->assertEquals('hello', $response['title']);
+    }
+
+    public function test_to_json_method()
+    {
+        $message = new FlashMessage();
+
+        $message->title('hello');
+
+        $response = $message->toJson();
+
+        $this->assertEquals('hello', json_decode($response)->title);
+    }
 }

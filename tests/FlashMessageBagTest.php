@@ -239,4 +239,48 @@ class FlashMessageBagTest extends AbstractTestCase
 
         $this->assertFalse(isset($bag[0]));
     }
+
+    public function test_json_serialize_method()
+    {
+        $bag = new FlashMessagesBag();
+
+        $bag->add()->hops(2);
+
+        $bag->prepare();
+
+        $response = $bag->jsonSerialize();
+
+        $this->assertEquals(2, $response[0]['hops']);
+    }
+
+    public function test_to_json_method()
+    {
+        $bag = new FlashMessagesBag();
+
+        $bag->add()->hops(2);
+
+        $bag->prepare();
+
+        $response = $bag->toJson();
+
+        $this->assertEquals(2, json_decode($response)[0]->hops);
+    }
+
+    public function test_to_array_method()
+    {
+        $bag = new FlashMessagesBag();
+
+        $bag->add()->hops(2);
+
+        $bag->prepare();
+
+        $this->assertEquals([
+            'title' => null,
+            'content' => null,
+            'type' => 'info',
+            'hops' => 2,
+            'delay' => 0,
+            'important' => false
+        ], $bag->toArray()[0]);
+    }
 }
