@@ -75,6 +75,10 @@ laraflash()->render();
 
 > Default separator between the messages is the `<br>`, which is specified in the `laraflash.separator` config. Feel free to change it if you need.
 
+Example of messages rendered as HTML:
+
+![Example](example.png)
+
 ### Getting ready messages as an array
 
 You can get ready messages as an array this way:
