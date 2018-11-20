@@ -6,6 +6,6 @@ class InvalidDelayException extends InvalidArgumentException
 {
     public function __construct()
     {
-        parent::__construct('Invalid delay.');
+        $this->message = 'Invalid delay.';
     }
 }

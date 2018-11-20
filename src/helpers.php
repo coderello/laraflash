@@ -1,13 +1,17 @@
 <?php
 
-use Coderello\Laraflash\Contracts\FlashMessagesBag;
+use Coderello\Laraflash\Laraflash;
 
 if (! function_exists('laraflash')) {
-    /**
-     * @return FlashMessagesBag
-     */
-    function laraflash(): FlashMessagesBag
+    function laraflash()
     {
-        return app('laraflash.bag');
+        /** @var Laraflash $laraflash */
+        $laraflash = app('laraflash');
+
+        if (func_num_args()) {
+            return $laraflash->message(...func_get_args());
+        }
+
+        return $laraflash;
     }
 }

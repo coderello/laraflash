@@ -13,6 +13,6 @@ class Laraflash extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'laraflash.bag';
+        return 'laraflash';
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Coderello\Laraflash\Exceptions;
 
-use InvalidArgumentException as NativeInvalidArgumentException;
+use InvalidArgumentException as BaseInvalidArgumentException;
 
-class InvalidArgumentException extends NativeInvalidArgumentException
+class InvalidArgumentException extends BaseInvalidArgumentException
 {
 }

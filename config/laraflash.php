@@ -35,24 +35,6 @@ return [
     | This value is the separator between the flash messages.
     |
     */
-
     'separator' => '<br>',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Default Values For The Flash Message
-    |--------------------------------------------------------------------------
-    |
-    | This value is an array with default values for the flash message.
-    |
-    */
-    'defaults' => [
-        // 'title' => 'Default title',
-        // 'content' => 'Default content',
-        'type' => 'info',
-        'hops' => 1,
-        'delay' => 1,
-        'important' => false,
-    ],
 
 ];

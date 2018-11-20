@@ -2,295 +2,239 @@
 
 namespace Coderello\Laraflash;
 
-use Throwable;
+use Coderello\Laraflash\Events\FlashMessageCreated;
 use Coderello\Laraflash\Exceptions\InvalidDelayException;
-use Coderello\Laraflash\Exceptions\InvalidArgumentException;
 use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
-use Coderello\Laraflash\Contracts\FlashMessage as FlashMessageContract;
+use Coderello\Laraflash\Exceptions\SkinNotFoundException;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\Support\Jsonable;
+use ArrayAccess;
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Foundation\Application;
+use JsonSerializable;
+use Illuminate\Contracts\View\Factory as ViewFactory;
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
+use Illuminate\Events\Dispatcher as EventDispatcher;
 
-class FlashMessage implements FlashMessageContract
+class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Renderable, Htmlable
 {
-    /**
-     * @var array
-     */
-    const MUTABLE_PROPERTIES = ['title', 'content', 'type', 'hops', 'delay', 'important'];
+    /** @var Application */
+    protected $app;
 
-    /**
-     * @var string|null
-     */
-    protected $title;
+    /** @var array */
+    protected $attributes = [];
 
-    /**
-     * @var string|null
-     */
-    protected $content;
-
-    /**
-     * @var string|null
-     */
-    protected $type;
-
-    /**
-     * @var int|null
-     */
-    protected $hops;
-
-    /**
-     * @var int|null
-     */
-    protected $delay;
-
-    /**
-     * @var bool|null
-     */
-    protected $important;
-
-    /**
-     * FlashMessage constructor.
-     */
-    public function __construct()
+    public function __construct(Application $app)
     {
+        $this->app = $app;
+
         $this->hops(1);
 
         $this->delay(1);
 
-        $this->important(false);
+        /** @var EventDispatcher $eventDispatcher */
+        $eventDispatcher = $this->app->make(EventDispatcher::class);
+
+        $eventDispatcher->dispatch(new FlashMessageCreated($this));
     }
 
-    /**
-     * Set the title for the current FlashMessage instance.
-     *
-     * @param string $title
-     *
-     * @return FlashMessage
-     */
-    public function title(string $title): FlashMessageContract
+    public static function attributesThatShouldNotBeStoredDirectly(): array
     {
-        $this->title = $title;
+        return ['content', 'title', 'type', 'hops', 'delay'];
+    }
+
+    public function content(?string $content): self
+    {
+        $this->setAttribute('content', $content);
 
         return $this;
     }
 
-    /**
-     * Set the content for the current FlashMessage instance.
-     *
-     * @param string $content
-     *
-     * @return FlashMessage
-     */
-    public function content(string $content): FlashMessageContract
+    public function title(?string $title): self
     {
-        $this->content = $content;
+        $this->setAttribute('title', $title);
 
         return $this;
     }
 
-    /**
-     * Set the type for the current FlashMessage instance.
-     *
-     * @param string $type
-     *
-     * @return FlashMessage
-     */
-    public function type(string $type): FlashMessageContract
+    public function type(?string $type): self
     {
-        $this->type = $type;
+        $this->setAttribute('type', $type);
 
         return $this;
     }
 
-    /**
-     * Set the hops amount for the current FlashMessage instance.
-     *
-     * @param int $hops
-     *
-     * @throws InvalidHopsAmountException
-     *
-     * @return FlashMessage
-     */
-    public function hops(int $hops): FlashMessageContract
+    public function danger(): self
+    {
+        $this->type('danger');
+
+        return $this;
+    }
+
+    public function warning(): self
+    {
+        $this->type('warning');
+
+        return $this;
+    }
+
+    public function info(): self
+    {
+        $this->type('info');
+
+        return $this;
+    }
+
+    public function success(): self
+    {
+        $this->type('success');
+
+        return $this;
+    }
+
+    public function hops(int $hops): self
     {
         if ($hops < 1) {
             throw new InvalidHopsAmountException;
         }
 
-        $this->hops = $hops;
+        $this->setAttribute('hops', $hops);
 
         return $this;
     }
 
-    /**
-     * Set the delay for the current FlashMessage instance.
-     *
-     * @param int $delay
-     *
-     * @throws InvalidDelayException
-     *
-     * @return FlashMessage
-     */
-    public function delay(int $delay): FlashMessageContract
+    public function delay(int $delay): self
     {
         if ($delay < 0) {
             throw new InvalidDelayException;
         }
 
-        $this->delay = $delay;
+        $this->setAttribute('delay', $delay);
 
         return $this;
     }
 
-    /**
-     * Set the important flag for the current FlashMessage instance.
-     *
-     * @param bool $important
-     *
-     * @return FlashMessage
-     */
-    public function important(bool $important = true): FlashMessageContract
-    {
-        $this->important = $important;
-
-        return $this;
-    }
-
-    /**
-     * Show the message during the current request.
-     *
-     * @return FlashMessage
-     */
-    public function now(): FlashMessageContract
+    public function now(): self
     {
         $this->delay(0);
 
         return $this;
     }
 
-    /**
-     * Keep the message for one more request.
-     *
-     * @return FlashMessage
-     */
-    public function keep(): FlashMessageContract
+    public function keep(): self
     {
-        $this->hops++;
+        $this->setAttribute('hops', $this->getAttribute('hops') + 1);
 
         return $this;
     }
 
-    /**
-     * Get the evaluated contents of the object.
-     *
-     * @return string
-     *
-     * @throws Throwable
-     */
-    public function render(): string
+    public function attribute(string $key, $value): self
     {
-        return view(config('laraflash.skin'), $this->toArray())->render();
+        if (in_array($key, static::attributesThatShouldNotBeStoredDirectly())) {
+            $this->{$key}($value);
+        } else {
+            $this->setAttribute($key, $value);
+        }
+
+        return $this;
     }
 
-    /**
-     * Data which should be serialized to JSON.
-     *
-     * @return array|mixed
-     */
+    protected function setAttribute(string $key, $value): self
+    {
+        if (! is_null($value)) {
+            $this->attributes[$key] = $value;
+        } else {
+            unset($this->attributes[$key]);
+        }
+
+        return $this;
+    }
+
+    protected function getAttribute(string $key)
+    {
+        return $this->attributes[$key] ?? null;
+    }
+
+    protected function hasAttribute(string $key): bool
+    {
+        return isset($this->attributes[$key]);
+    }
+
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    public function toArray()
+    {
+        return $this->getAttributes();
+    }
+
+    public function toJson($options = 0)
+    {
+        return json_encode($this, $options);
+    }
+
     public function jsonSerialize()
     {
         return $this->toArray();
     }
 
-    /**
-     * Convert the object to its JSON representation.
-     *
-     * @param int $options
-     *
-     * @return string
-     */
-    public function toJson($options = 0): string
+    public function toHtml()
     {
-        return json_encode($this, $options);
+        /** @var ViewFactory $viewFactory */
+        $viewFactory = $this->app->make(ViewFactory::class);
+
+        /** @var ConfigRepository $configRepository */
+        $configRepository = $this->app->make(ConfigRepository::class);
+
+        $skin = $configRepository->get('laraflash.skin');
+
+        if (! $viewFactory->exists($skin)) {
+            throw new SkinNotFoundException($skin);
+        }
+
+        return $viewFactory->make($skin, $this->getAttributes())->render();
     }
 
-    /**
-     * Get the instance as an array.
-     *
-     * @return array
-     */
-    public function toArray(): array
+    public function render()
     {
-        return array_reduce(self::MUTABLE_PROPERTIES, function (array $accumulator, string $property) {
-            $accumulator[$property] = $this->{$property};
-
-            return $accumulator;
-        }, []);
+        return $this->toHtml();
     }
 
-    /**
-     * Whether a offset exists.
-     *
-     * @param mixed $offset
-     *
-     * @return bool
-     */
     public function offsetExists($offset)
     {
-        return $this->isMutableProperty($offset);
+        return $this->hasAttribute($offset);
     }
 
-    /**
-     * Offset to retrieve.
-     *
-     * @param mixed $offset
-     *
-     * @return mixed
-     */
     public function offsetGet($offset)
     {
-        if (! $this->isMutableProperty($offset)) {
-            throw new InvalidArgumentException;
-        }
-
-        return $this->{$offset};
+        return $this->getAttribute($offset);
     }
 
-    /**
-     * Offset to set.
-     *
-     * @param mixed $offset
-     * @param mixed $value
-     *
-     * @return void
-     */
     public function offsetSet($offset, $value)
     {
-        if (! $this->isMutableProperty($offset)) {
-            throw new InvalidArgumentException;
-        }
-
-        $this->{$offset}($value);
+        $this->attribute($offset, $value);
     }
 
-    /**
-     * Offset to unset.
-     *
-     * @param mixed $offset
-     *
-     * @return void
-     */
     public function offsetUnset($offset)
     {
-        //
+        $this->attribute($offset, null);
     }
 
-    /**
-     * Whether a property is mutable.
-     *
-     * @param string $property
-     *
-     * @return bool
-     */
-    protected function isMutableProperty(string $property): bool
+    public function __get($name)
     {
-        return in_array($property, self::MUTABLE_PROPERTIES);
+        return $this->getAttribute($name);
+    }
+
+    public function __set($name, $value)
+    {
+        $this->attribute($name, $value);
+    }
+
+    public function __isset($name)
+    {
+        return $this->hasAttribute($name);
     }
 }

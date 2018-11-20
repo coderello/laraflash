@@ -1,3 +1,3 @@
-<div class="alert alert-{{ $type }}" role="alert">
-    <strong>{{ $title }}</strong> {{ $content }}
+<div class="alert alert-{{ $type ?? null }}" role="alert">
+    <strong>{{ $title ?? null }}</strong> {{ $content ?? null }}
 </div>
