@@ -2,20 +2,20 @@
 
 namespace Coderello\Laraflash;
 
-use Coderello\Laraflash\Events\FlashMessageCreated;
-use Coderello\Laraflash\Exceptions\InvalidDelayException;
-use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
-use Coderello\Laraflash\Exceptions\SkinNotFoundException;
-use Illuminate\Contracts\Support\Arrayable;
+use ArrayAccess;
+use JsonSerializable;
+use Illuminate\Foundation\Application;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Jsonable;
-use ArrayAccess;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Foundation\Application;
-use JsonSerializable;
-use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\Contracts\Config\Repository as ConfigRepository;
+use Coderello\Laraflash\Events\FlashMessageCreated;
 use Illuminate\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\View\Factory as ViewFactory;
+use Coderello\Laraflash\Exceptions\InvalidDelayException;
+use Coderello\Laraflash\Exceptions\SkinNotFoundException;
+use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
 
 class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Renderable, Htmlable
 {

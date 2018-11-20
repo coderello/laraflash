@@ -2,11 +2,11 @@
 
 namespace Coderello\Laraflash\Providers;
 
-use Coderello\Laraflash\MessagesStorage\MessagesStorage;
-use Coderello\Laraflash\MessagesStorage\SessionMessagesStorage;
 use Coderello\Laraflash\Laraflash;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use Coderello\Laraflash\MessagesStorage\MessagesStorage;
+use Coderello\Laraflash\MessagesStorage\SessionMessagesStorage;
 
 class LaraflashServiceProvider extends ServiceProvider
 {
@@ -46,11 +46,11 @@ class LaraflashServiceProvider extends ServiceProvider
     protected function offerPublishing()
     {
         $this->publishes([
-            __DIR__ . '/../../resources/views' => $this->app->resourcePath('views/vendor/laraflash'),
+            __DIR__.'/../../resources/views' => $this->app->resourcePath('views/vendor/laraflash'),
         ], 'laraflash-views');
 
         $this->publishes([
-            __DIR__ . '/../../config/laraflash.php' => $this->app->configPath('laraflash.php'),
+            __DIR__.'/../../config/laraflash.php' => $this->app->configPath('laraflash.php'),
         ], 'laraflash-config');
     }
 
@@ -61,7 +61,7 @@ class LaraflashServiceProvider extends ServiceProvider
      */
     protected function registerResources()
     {
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views/components/skins', 'laraflash_skin');
+        $this->loadViewsFrom(__DIR__.'/../../resources/views/components/skins', 'laraflash_skin');
     }
 
     /**
@@ -72,7 +72,7 @@ class LaraflashServiceProvider extends ServiceProvider
     protected function configure()
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../../config/laraflash.php',
+            __DIR__.'/../../config/laraflash.php',
             'laraflash'
         );
     }

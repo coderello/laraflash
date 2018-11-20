@@ -2,16 +2,16 @@
 
 namespace Coderello\Laraflash;
 
+use ArrayAccess;
+use JsonSerializable;
 use BadMethodCallException;
-use Coderello\Laraflash\MessagesStorage\MessagesStorage;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Collection;
-use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Foundation\Application;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Jsonable;
-use ArrayAccess;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
-use JsonSerializable;
+use Coderello\Laraflash\MessagesStorage\MessagesStorage;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
 
 class Laraflash implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Renderable, Htmlable

@@ -3,8 +3,8 @@
 namespace Coderello\Laraflash\Middleware;
 
 use Closure;
-use Coderello\Laraflash\Laraflash;
 use Illuminate\Http\Request;
+use Coderello\Laraflash\Laraflash;
 
 class HandleLaraflash
 {
