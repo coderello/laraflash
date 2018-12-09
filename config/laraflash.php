@@ -37,4 +37,9 @@ return [
     */
     'separator' => '<br>',
 
+    /*
+     * todo: description
+     */
+    'messages_storage' => 'session',
+
 ];

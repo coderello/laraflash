@@ -2,7 +2,7 @@
 
 namespace Coderello\Laraflash\MessagesStorage;
 
-class ArrayMessagesStorage implements MessagesStorage
+class ArrayMessagesStorage implements MessagesStorageContract
 {
     protected $messages = [];
 

@@ -2,10 +2,19 @@
 
 namespace Coderello\Laraflash\Providers;
 
-use Coderello\Laraflash\Laraflash;
+use Coderello\Laraflash\FlashMessage\FlashMessageFactory;
+use Coderello\Laraflash\FlashMessage\FlashMessageFactoryContract;
+use Coderello\Laraflash\FlashMessage\FlashMessageRendererContract;
+use Coderello\Laraflash\FlashMessage\ViewFlashMessageRenderer;
+use Coderello\Laraflash\Laraflash\Laraflash;
+use Coderello\Laraflash\Laraflash\LaraflashRenderer;
+use Coderello\Laraflash\Laraflash\LaraflashRendererContract;
+use Coderello\Laraflash\Laraflash\LaraflashToucher;
+use Coderello\Laraflash\Laraflash\LaraflashToucherContract;
+use Coderello\Laraflash\MessagesStorage\MessagesStorageManager;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
-use Coderello\Laraflash\MessagesStorage\MessagesStorage;
+use Coderello\Laraflash\MessagesStorage\MessagesStorageContract;
 use Coderello\Laraflash\MessagesStorage\SessionMessagesStorage;
 
 class LaraflashServiceProvider extends ServiceProvider
@@ -29,7 +38,26 @@ class LaraflashServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(MessagesStorage::class, SessionMessagesStorage::class);
+        $this->app->bind(MessagesStorageContract::class, SessionMessagesStorage::class);
+
+        $this->app->bind(LaraflashRendererContract::class, LaraflashRenderer::class);
+
+        $this->app->bind(FlashMessageRendererContract::class, ViewFlashMessageRenderer::class);
+
+        $this->app->bind(LaraflashToucherContract::class, LaraflashToucher::class);
+
+        $this->app->bind(FlashMessageFactoryContract::class, FlashMessageFactory::class);
+
+        $this->app->singleton(MessagesStorageManager::class, function (Application $app) {
+            return new MessagesStorageManager($app);
+        });
+
+        $this->app->bind(MessagesStorageContract::class, function (Application $app) {
+            /** @var MessagesStorageManager $messagesStorageManager */
+            $messagesStorageManager = $app->make(MessagesStorageManager::class);
+
+            return $messagesStorageManager->driver();
+        });
 
         $this->app->singleton('laraflash', function (Application $app) {
             return $app->make(Laraflash::class);

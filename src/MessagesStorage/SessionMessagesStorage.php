@@ -4,26 +4,34 @@ namespace Coderello\Laraflash\MessagesStorage;
 
 use Illuminate\Contracts\Session\Session;
 
-class SessionMessagesStorage implements MessagesStorage
+class SessionMessagesStorage implements MessagesStorageContract
 {
     protected $session;
 
-    protected $sessionKey;
+    protected $key;
 
-    public function __construct(Session $session, string $sessionKey = 'flash_messages')
+    public function __construct(Session $session)
     {
         $this->session = $session;
+    }
 
-        $this->sessionKey = $sessionKey;
+    public function setKey(string $key)
+    {
+        $this->key = $key;
+    }
+
+    public function getKey()
+    {
+        return $this->key ?? 'flash_messages';
     }
 
     public function get(): array
     {
-        return $this->session->get($this->sessionKey, []);
+        return $this->session->get($this->getKey(), []);
     }
 
     public function put(array $messages): void
     {
-        $this->session->put($this->sessionKey, $messages);
+        $this->session->put($this->getKey(), $messages);
     }
 }

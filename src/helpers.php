@@ -1,11 +1,9 @@
 <?php
 
-use Coderello\Laraflash\Laraflash;
-
 if (! function_exists('laraflash')) {
     function laraflash()
     {
-        /** @var Laraflash $laraflash */
+        /** @var \Coderello\Laraflash\Laraflash\Laraflash $laraflash */
         $laraflash = app('laraflash');
 
         if (func_num_args()) {

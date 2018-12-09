@@ -1,42 +1,44 @@
 <?php
 
-namespace Coderello\Laraflash;
+namespace Coderello\Laraflash\Laraflash;
 
 use ArrayAccess;
+use Coderello\Laraflash\FlashMessage\FlashMessage;
+use Coderello\Laraflash\FlashMessage\FlashMessageFactoryContract;
 use JsonSerializable;
 use BadMethodCallException;
 use Illuminate\Support\Collection;
-use Illuminate\Foundation\Application;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
-use Coderello\Laraflash\MessagesStorage\MessagesStorage;
-use Illuminate\Contracts\Config\Repository as ConfigRepository;
+use Coderello\Laraflash\MessagesStorage\MessagesStorageContract;
 
 class Laraflash implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Renderable, Htmlable
 {
-    /** @var Application */
-    protected $app;
-
-    /** @var MessagesStorage */
-    protected $storage;
-
     /** @var Collection */
     protected $messages;
 
-    public function __construct(Application $app)
-    {
-        $this->app = $app;
+    protected $flashMessageFactory;
 
-        $this->storage = $this->app->make(MessagesStorage::class);
+    protected $messagesStorage;
+
+    protected $laraflashRenderer;
+
+    public function __construct(FlashMessageFactoryContract $flashMessageFactory, MessagesStorageContract $messagesStorage, LaraflashRendererContract $laraflashRenderer)
+    {
+        $this->flashMessageFactory = $flashMessageFactory;
+
+        $this->messagesStorage = $messagesStorage;
+
+        $this->laraflashRenderer = $laraflashRenderer;
 
         $this->messages = Collection::make();
     }
 
     public function load(): self
     {
-        $this->messages = Collection::make($this->storage->get())
+        $this->messages = Collection::make($this->messagesStorage->get())
             ->whereInstanceOf(FlashMessage::class);
 
         return $this;
@@ -44,15 +46,14 @@ class Laraflash implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, R
 
     public function save(): self
     {
-        $this->storage->put($this->messages->all());
+        $this->messagesStorage->put($this->messages->all());
 
         return $this;
     }
 
     public function message(?string $content = null, ?string $title = null, ?string $type = null, ?int $delay = null, ?int $hops = null): FlashMessage
     {
-        /** @var FlashMessage $message */
-        $message = $this->app->make(FlashMessage::class);
+        $message = $this->flashMessageFactory->make();
 
         if (! is_null($content)) {
             $message->content($content);
@@ -159,20 +160,11 @@ class Laraflash implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, R
 
     public function toHtml()
     {
-        /** @var ConfigRepository $configRepository */
-        $configRepository = $this->app->make(ConfigRepository::class);
-
-        $separator = $configRepository->get('laraflash.separator', '');
-
-        return $this->messages
-            ->map(function (FlashMessage $message) {
-                return $message->toHtml();
-            })
-            ->implode($separator);
+        return $this->render();
     }
 
     public function render()
     {
-        return $this->toHtml();
+        return $this->laraflashRenderer->render($this);
     }
 }

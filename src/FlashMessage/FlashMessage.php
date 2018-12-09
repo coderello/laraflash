@@ -1,42 +1,30 @@
 <?php
 
-namespace Coderello\Laraflash;
+namespace Coderello\Laraflash\FlashMessage;
 
 use ArrayAccess;
 use JsonSerializable;
-use Illuminate\Foundation\Application;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
-use Coderello\Laraflash\Events\FlashMessageCreated;
-use Illuminate\Events\Dispatcher as EventDispatcher;
-use Illuminate\Contracts\View\Factory as ViewFactory;
 use Coderello\Laraflash\Exceptions\InvalidDelayException;
-use Coderello\Laraflash\Exceptions\SkinNotFoundException;
 use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
-use Illuminate\Contracts\Config\Repository as ConfigRepository;
 
 class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Renderable, Htmlable
 {
-    /** @var Application */
-    protected $app;
-
     /** @var array */
     protected $attributes = [];
 
-    public function __construct(Application $app)
+    protected $flashMessageRenderer;
+
+    public function __construct(FlashMessageRendererContract $flashMessageRenderer)
     {
-        $this->app = $app;
+        $this->flashMessageRenderer = $flashMessageRenderer;
 
         $this->hops(1);
 
         $this->delay(1);
-
-        /** @var EventDispatcher $eventDispatcher */
-        $eventDispatcher = $this->app->make(EventDispatcher::class);
-
-        $eventDispatcher->dispatch(new FlashMessageCreated($this));
     }
 
     public static function attributesThatShouldNotBeStoredDirectly(): array
@@ -46,21 +34,21 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
 
     public function content(?string $content): self
     {
-        $this->setAttribute('content', $content);
+        $this->setAttributeDirectly('content', $content);
 
         return $this;
     }
 
     public function title(?string $title): self
     {
-        $this->setAttribute('title', $title);
+        $this->setAttributeDirectly('title', $title);
 
         return $this;
     }
 
     public function type(?string $type): self
     {
-        $this->setAttribute('type', $type);
+        $this->setAttributeDirectly('type', $type);
 
         return $this;
     }
@@ -99,7 +87,7 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
             throw new InvalidHopsAmountException;
         }
 
-        $this->setAttribute('hops', $hops);
+        $this->setAttributeDirectly('hops', $hops);
 
         return $this;
     }
@@ -110,7 +98,7 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
             throw new InvalidDelayException;
         }
 
-        $this->setAttribute('delay', $delay);
+        $this->setAttributeDirectly('delay', $delay);
 
         return $this;
     }
@@ -124,23 +112,19 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
 
     public function keep(): self
     {
-        $this->setAttribute('hops', $this->getAttribute('hops') + 1);
+        $this->setAttributeDirectly('hops', $this->getAttribute('hops') + 1);
 
         return $this;
     }
 
     public function attribute(string $key, $value): self
     {
-        if (in_array($key, static::attributesThatShouldNotBeStoredDirectly())) {
-            $this->{$key}($value);
-        } else {
-            $this->setAttribute($key, $value);
-        }
+        $this->setAttribute($key, $value);
 
         return $this;
     }
 
-    protected function setAttribute(string $key, $value): self
+    protected function setAttributeDirectly(string $key, $value): self
     {
         if (! is_null($value)) {
             $this->attributes[$key] = $value;
@@ -151,14 +135,23 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
         return $this;
     }
 
-    protected function getAttribute(string $key)
-    {
-        return $this->attributes[$key] ?? null;
-    }
-
     protected function hasAttribute(string $key): bool
     {
         return isset($this->attributes[$key]);
+    }
+
+    public function setAttribute(string $key, $value)
+    {
+        if (in_array($key, static::attributesThatShouldNotBeStoredDirectly())) {
+            $this->{$key}($value);
+        } else {
+            $this->setAttributeDirectly($key, $value);
+        }
+    }
+
+    public function getAttribute(string $key)
+    {
+        return $this->attributes[$key] ?? null;
     }
 
     public function getAttributes(): array
@@ -183,24 +176,12 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
 
     public function toHtml()
     {
-        /** @var ViewFactory $viewFactory */
-        $viewFactory = $this->app->make(ViewFactory::class);
-
-        /** @var ConfigRepository $configRepository */
-        $configRepository = $this->app->make(ConfigRepository::class);
-
-        $skin = $configRepository->get('laraflash.skin');
-
-        if (! $viewFactory->exists($skin)) {
-            throw new SkinNotFoundException($skin);
-        }
-
-        return $viewFactory->make($skin, $this->getAttributes())->render();
+        return $this->render();
     }
 
     public function render()
     {
-        return $this->toHtml();
+        return $this->flashMessageRenderer->render($this);
     }
 
     public function offsetExists($offset)

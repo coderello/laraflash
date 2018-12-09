@@ -2,7 +2,7 @@
 
 namespace Coderello\Laraflash\MessagesStorage;
 
-interface MessagesStorage
+interface MessagesStorageContract
 {
     public function get(): array;
 

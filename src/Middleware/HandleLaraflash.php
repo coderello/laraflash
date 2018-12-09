@@ -3,31 +3,32 @@
 namespace Coderello\Laraflash\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
-use Coderello\Laraflash\Laraflash;
+use Coderello\Laraflash\Laraflash\Laraflash;
+use Coderello\Laraflash\Laraflash\LaraflashToucherContract;
 
 class HandleLaraflash
 {
+    protected $laraflash;
+
+    protected $laraflashToucher;
+
+    public function __construct(Laraflash $laraflash, LaraflashToucherContract $laraflashToucher)
+    {
+        $this->laraflash = $laraflash;
+
+        $this->laraflashToucher = $laraflashToucher;
+    }
+
     public function handle($request, Closure $next)
     {
-        /** @var Laraflash $laraflash */
-        $laraflash = app(Laraflash::class);
+        $this->laraflash->load();
 
-        $laraflash->load();
-
-        if ($this->shouldTouch($request)) {
-            $laraflash->touch();
-        }
+        $this->laraflashToucher->handle($this->laraflash, $request);
 
         $response = $next($request);
 
-        $laraflash->save();
+        $this->laraflash->save();
 
         return $response;
-    }
-
-    public function shouldTouch(Request $request): bool
-    {
-        return true;
     }
 }
