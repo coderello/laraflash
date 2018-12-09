@@ -2,20 +2,20 @@
 
 namespace Coderello\Laraflash\Providers;
 
-use Coderello\Laraflash\FlashMessage\FlashMessageFactory;
-use Coderello\Laraflash\FlashMessage\FlashMessageFactoryContract;
-use Coderello\Laraflash\FlashMessage\FlashMessageRendererContract;
-use Coderello\Laraflash\FlashMessage\ViewFlashMessageRenderer;
-use Coderello\Laraflash\Laraflash\Laraflash;
-use Coderello\Laraflash\Laraflash\LaraflashRenderer;
-use Coderello\Laraflash\Laraflash\LaraflashRendererContract;
-use Coderello\Laraflash\Laraflash\LaraflashToucher;
-use Coderello\Laraflash\Laraflash\LaraflashToucherContract;
-use Coderello\Laraflash\MessagesStorage\MessagesStorageManager;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
-use Coderello\Laraflash\MessagesStorage\MessagesStorageContract;
+use Coderello\Laraflash\Laraflash\Laraflash;
+use Coderello\Laraflash\Laraflash\LaraflashToucher;
+use Coderello\Laraflash\Laraflash\LaraflashRenderer;
+use Coderello\Laraflash\FlashMessage\FlashMessageFactory;
+use Coderello\Laraflash\Laraflash\LaraflashToucherContract;
+use Coderello\Laraflash\Laraflash\LaraflashRendererContract;
+use Coderello\Laraflash\FlashMessage\ViewFlashMessageRenderer;
+use Coderello\Laraflash\MessagesStorage\MessagesStorageManager;
 use Coderello\Laraflash\MessagesStorage\SessionMessagesStorage;
+use Coderello\Laraflash\MessagesStorage\MessagesStorageContract;
+use Coderello\Laraflash\FlashMessage\FlashMessageFactoryContract;
+use Coderello\Laraflash\FlashMessage\FlashMessageRendererContract;
 
 class LaraflashServiceProvider extends ServiceProvider
 {

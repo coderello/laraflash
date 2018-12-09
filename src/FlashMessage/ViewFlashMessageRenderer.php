@@ -2,8 +2,8 @@
 
 namespace Coderello\Laraflash\FlashMessage;
 
-use Coderello\Laraflash\Exceptions\SkinNotFoundException;
 use Illuminate\Contracts\View\Factory as ViewFactory;
+use Coderello\Laraflash\Exceptions\SkinNotFoundException;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
 
 class ViewFlashMessageRenderer implements FlashMessageRendererContract
