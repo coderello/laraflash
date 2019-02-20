@@ -4,7 +4,7 @@ namespace Coderello\Laraflash\Laraflash;
 
 use Illuminate\Http\Request;
 
-class LaraflashToucher implements LaraflashToucherContract
+class LaraflashPreparer implements LaraflashPreparerContract
 {
     public function handle(Laraflash $laraflash, Request $request)
     {

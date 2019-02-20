@@ -1,13 +1,15 @@
 <?php
 
+use Illuminate\Container\Container;
+
 if (! function_exists('laraflash')) {
-    function laraflash()
+    function laraflash(...$args)
     {
         /** @var \Coderello\Laraflash\Laraflash\Laraflash $laraflash */
-        $laraflash = app('laraflash');
+        $laraflash = Container::getInstance()->make('laraflash');
 
-        if (func_num_args()) {
-            return $laraflash->message(...func_get_args());
+        if ($args) {
+            return $laraflash->message(...$args);
         }
 
         return $laraflash;

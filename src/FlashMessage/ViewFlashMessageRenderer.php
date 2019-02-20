@@ -39,6 +39,6 @@ class ViewFlashMessageRenderer implements FlashMessageRendererContract
             throw new SkinNotFoundException($skin);
         }
 
-        return $this->viewFactory->make($skin, $flashMessage->getAttributes());
+        return $this->viewFactory->make($skin, $flashMessage->toArray());
     }
 }

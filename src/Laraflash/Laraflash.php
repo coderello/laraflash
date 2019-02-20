@@ -103,18 +103,21 @@ class Laraflash implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, R
 
     public function ready(): Collection
     {
-        return $this->messages->whereStrict('delay', 0);
+        return $this->messages
+            ->filter(function (FlashMessage $message) {
+                return $message->get('delay') === 0;
+            });
     }
 
     public function touch(): self
     {
         $this->messages = $this->messages->reject(function (FlashMessage $message) {
-            return $message['hops'] <= 1 && $message['delay'] === 0;
+            return $message->get('hops') <= 1 && $message->get('delay') === 0;
         })->each(function (FlashMessage $message) {
-            if ($message['hops'] > 1 && $message['delay'] === 0) {
-                $message->hops($message['hops'] - 1);
-            } elseif ($message['delay'] > 0) {
-                $message->delay($message['delay'] - 1);
+            if ($message->get('hops') > 1 && $message->get('delay') === 0) {
+                $message->hops($message->get('hops') - 1);
+            } elseif ($message->get('delay') > 0) {
+                $message->delay($message->get('delay') - 1);
             }
         });
 

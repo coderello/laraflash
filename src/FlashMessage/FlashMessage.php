@@ -13,42 +13,61 @@ use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
 
 class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Renderable, Htmlable
 {
+    /** @var string|null */
+    protected $content;
+
+    /** @var string|null */
+    protected $title;
+
+    /** @var string|null */
+    protected $type;
+
+    /** @var int|null */
+    protected $hops = 1;
+
+    /** @var int|null */
+    protected $delay = 1;
+
     /** @var array */
     protected $attributes = [];
 
+    /** @var FlashMessageRendererContract */
     protected $flashMessageRenderer;
 
     public function __construct(FlashMessageRendererContract $flashMessageRenderer)
     {
         $this->flashMessageRenderer = $flashMessageRenderer;
-
-        $this->hops(1);
-
-        $this->delay(1);
-    }
-
-    public static function attributesThatShouldNotBeStoredDirectly(): array
-    {
-        return ['content', 'title', 'type', 'hops', 'delay'];
     }
 
     public function content(?string $content): self
     {
-        $this->setAttributeDirectly('content', $content);
+        if (! is_null($content)) {
+            $this->content = $content;
+        } else {
+            unset($this->content);
+        }
 
         return $this;
     }
 
     public function title(?string $title): self
     {
-        $this->setAttributeDirectly('title', $title);
+        if (! is_null($title)) {
+            $this->title = $title;
+        } else {
+            unset($this->title);
+        }
 
         return $this;
     }
 
     public function type(?string $type): self
     {
-        $this->setAttributeDirectly('type', $type);
+        if (! is_null($type)) {
+            $this->type = $type;
+        } else {
+            unset($this->type);
+        }
 
         return $this;
     }
@@ -87,7 +106,7 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
             throw new InvalidHopsAmountException;
         }
 
-        $this->setAttributeDirectly('hops', $hops);
+        $this->hops = $hops;
 
         return $this;
     }
@@ -98,7 +117,7 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
             throw new InvalidDelayException;
         }
 
-        $this->setAttributeDirectly('delay', $delay);
+        $this->delay = $delay;
 
         return $this;
     }
@@ -112,19 +131,12 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
 
     public function keep(): self
     {
-        $this->setAttributeDirectly('hops', $this->getAttribute('hops') + 1);
+        $this->hops++;
 
         return $this;
     }
 
-    public function attribute(string $key, $value): self
-    {
-        $this->setAttribute($key, $value);
-
-        return $this;
-    }
-
-    protected function setAttributeDirectly(string $key, $value): self
+    public function attribute(string $key, $value = null): self
     {
         if (! is_null($value)) {
             $this->attributes[$key] = $value;
@@ -135,33 +147,26 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
         return $this;
     }
 
-    protected function hasAttribute(string $key): bool
+    public function get(string $key)
     {
-        return isset($this->attributes[$key]);
-    }
-
-    public function setAttribute(string $key, $value)
-    {
-        if (in_array($key, static::attributesThatShouldNotBeStoredDirectly())) {
-            $this->{$key}($value);
-        } else {
-            $this->setAttributeDirectly($key, $value);
+        if (in_array($key, ['title', 'content', 'hops', 'delay', 'type'])) {
+            return $this->{$key};
         }
-    }
 
-    public function getAttribute(string $key)
-    {
         return $this->attributes[$key] ?? null;
-    }
-
-    public function getAttributes(): array
-    {
-        return $this->attributes;
     }
 
     public function toArray()
     {
-        return $this->getAttributes();
+        return array_merge(
+            $this->attributes, [
+                'content' => $this->content,
+                'title' => $this->title,
+                'type' => $this->type,
+                'hops' => $this->hops,
+                'delay' => $this->delay,
+            ]
+        );
     }
 
     public function toJson($options = 0)
@@ -186,12 +191,12 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
 
     public function offsetExists($offset)
     {
-        return $this->hasAttribute($offset);
+        return isset($this->attributes[$offset]);
     }
 
     public function offsetGet($offset)
     {
-        return $this->getAttribute($offset);
+        return $this->attributes[$offset];
     }
 
     public function offsetSet($offset, $value)
@@ -201,12 +206,12 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
 
     public function offsetUnset($offset)
     {
-        $this->attribute($offset, null);
+        unset($this->attributes[$offset]);
     }
 
     public function __get($name)
     {
-        return $this->getAttribute($name);
+        return $this->attributes[$name] ?? null;
     }
 
     public function __set($name, $value)
@@ -216,6 +221,11 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
 
     public function __isset($name)
     {
-        return $this->hasAttribute($name);
+        return isset($this->attributes[$name]);
+    }
+
+    public function __unset($name)
+    {
+        unset($this->attributes[$name]);
     }
 }

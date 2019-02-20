@@ -9,8 +9,8 @@ use Coderello\Laraflash\FlashMessage\ViewFlashMessageRenderer;
 use Coderello\Laraflash\Laraflash\Laraflash;
 use Coderello\Laraflash\Laraflash\LaraflashRenderer;
 use Coderello\Laraflash\Laraflash\LaraflashRendererContract;
-use Coderello\Laraflash\Laraflash\LaraflashToucher;
-use Coderello\Laraflash\Laraflash\LaraflashToucherContract;
+use Coderello\Laraflash\Laraflash\LaraflashPreparer;
+use Coderello\Laraflash\Laraflash\LaraflashPreparerContract;
 use Coderello\Laraflash\MessagesStorage\MessagesStorageManager;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -38,13 +38,25 @@ class LaraflashServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerBindings();
+
+        $this->configure();
+    }
+
+    /**
+     * Register the Laraflash bindings.
+     *
+     * @return void
+     */
+    protected function registerBindings()
+    {
         $this->app->bind(MessagesStorageContract::class, SessionMessagesStorage::class);
 
         $this->app->bind(LaraflashRendererContract::class, LaraflashRenderer::class);
 
         $this->app->bind(FlashMessageRendererContract::class, ViewFlashMessageRenderer::class);
 
-        $this->app->bind(LaraflashToucherContract::class, LaraflashToucher::class);
+        $this->app->bind(LaraflashPreparerContract::class, LaraflashPreparer::class);
 
         $this->app->bind(FlashMessageFactoryContract::class, FlashMessageFactory::class);
 
@@ -62,8 +74,6 @@ class LaraflashServiceProvider extends ServiceProvider
         $this->app->singleton('laraflash', function (Application $app) {
             return $app->make(Laraflash::class);
         });
-
-        $this->configure();
     }
 
     /**
@@ -93,7 +103,7 @@ class LaraflashServiceProvider extends ServiceProvider
     }
 
     /**
-     * Setup the configuration for Horizon.
+     * Setup the configuration for Laraflash.
      *
      * @return void
      */

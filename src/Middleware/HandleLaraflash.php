@@ -4,7 +4,7 @@ namespace Coderello\Laraflash\Middleware;
 
 use Closure;
 use Coderello\Laraflash\Laraflash\Laraflash;
-use Coderello\Laraflash\Laraflash\LaraflashToucherContract;
+use Coderello\Laraflash\Laraflash\LaraflashPreparerContract;
 
 class HandleLaraflash
 {
@@ -12,7 +12,7 @@ class HandleLaraflash
 
     protected $laraflashToucher;
 
-    public function __construct(Laraflash $laraflash, LaraflashToucherContract $laraflashToucher)
+    public function __construct(Laraflash $laraflash, LaraflashPreparerContract $laraflashToucher)
     {
         $this->laraflash = $laraflash;
 
