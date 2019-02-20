@@ -3,9 +3,9 @@
 namespace Coderello\Laraflash\Tests;
 
 use Coderello\Laraflash\Laraflash\Laraflash;
-use Coderello\Laraflash\Tests\Support\FlashMessageFactory;
-use Coderello\Laraflash\Tests\Support\LaraflashRenderer;
 use Coderello\Laraflash\Tests\Support\MessagesStorage;
+use Coderello\Laraflash\Tests\Support\LaraflashRenderer;
+use Coderello\Laraflash\Tests\Support\FlashMessageFactory;
 
 class LaraflashTest extends AbstractTestCase
 {

@@ -4,10 +4,10 @@ namespace Coderello\Laraflash\Tests;
 
 use Coderello\Laraflash\Laraflash\Laraflash;
 use Coderello\Laraflash\Laraflash\LaraflashRenderer;
+use Illuminate\Config\Repository as ConfigRepository;
+use Coderello\Laraflash\Tests\Support\MessagesStorage;
 use Coderello\Laraflash\Tests\Support\FlashMessageFactory;
 use Coderello\Laraflash\Tests\Support\FlashMessageRenderer;
-use Coderello\Laraflash\Tests\Support\MessagesStorage;
-use Illuminate\Config\Repository as ConfigRepository;
 
 class LaraflashRendererTest extends AbstractTestCase
 {

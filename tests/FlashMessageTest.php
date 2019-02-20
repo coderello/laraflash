@@ -2,22 +2,22 @@
 
 namespace Coderello\Laraflash\Tests;
 
-use Coderello\Laraflash\Exceptions\InvalidDelayException;
-use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
+use Illuminate\Support\Arr;
 use Coderello\Laraflash\FlashMessage\FlashMessage;
+use Coderello\Laraflash\Exceptions\InvalidDelayException;
 use Coderello\Laraflash\Tests\Support\FlashMessageFactory;
 use Coderello\Laraflash\Tests\Support\FlashMessageRenderer;
-use Illuminate\Support\Arr;
+use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
 
 class FlashMessageTest extends AbstractTestCase
 {
     /** @var FlashMessage */
     protected $flashMessage;
-    
+
     protected function setUp()
     {
         parent::setUp();
-        
+
         $this->flashMessage = (new FlashMessageFactory)->make();
     }
 

@@ -2,12 +2,12 @@
 
 namespace Coderello\Laraflash\Tests;
 
+use Illuminate\Support\Facades\Request;
 use Coderello\Laraflash\Laraflash\Laraflash;
 use Coderello\Laraflash\Laraflash\LaraflashPreparer;
-use Coderello\Laraflash\Tests\Support\FlashMessageFactory;
-use Coderello\Laraflash\Tests\Support\LaraflashRenderer;
 use Coderello\Laraflash\Tests\Support\MessagesStorage;
-use Illuminate\Support\Facades\Request;
+use Coderello\Laraflash\Tests\Support\LaraflashRenderer;
+use Coderello\Laraflash\Tests\Support\FlashMessageFactory;
 
 class LaraflashPreparerTest extends AbstractTestCase
 {

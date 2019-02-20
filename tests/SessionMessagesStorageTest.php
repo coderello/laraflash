@@ -2,9 +2,9 @@
 
 namespace Coderello\Laraflash\Tests;
 
-use Coderello\Laraflash\MessagesStorage\SessionMessagesStorage;
-use Coderello\Laraflash\Tests\Support\FlashMessageFactory;
 use Illuminate\Contracts\Session\Session;
+use Coderello\Laraflash\Tests\Support\FlashMessageFactory;
+use Coderello\Laraflash\MessagesStorage\SessionMessagesStorage;
 
 class SessionMessagesStorageTest extends AbstractTestCase
 {
@@ -16,7 +16,7 @@ class SessionMessagesStorageTest extends AbstractTestCase
 
     /** @var FlashMessageFactory */
     protected $flashMessageFactory;
-    
+
     protected function setUp()
     {
         parent::setUp();

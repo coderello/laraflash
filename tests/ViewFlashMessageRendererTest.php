@@ -2,11 +2,11 @@
 
 namespace Coderello\Laraflash\Tests;
 
-use Coderello\Laraflash\Exceptions\SkinNotFoundException;
 use Coderello\Laraflash\FlashMessage\FlashMessage;
-use Coderello\Laraflash\FlashMessage\ViewFlashMessageRenderer;
 use Coderello\Laraflash\Tests\Support\ViewFactory;
 use Illuminate\Config\Repository as ConfigRepository;
+use Coderello\Laraflash\Exceptions\SkinNotFoundException;
+use Coderello\Laraflash\FlashMessage\ViewFlashMessageRenderer;
 
 class ViewFlashMessageRendererTest extends AbstractTestCase
 {
@@ -18,7 +18,7 @@ class ViewFlashMessageRendererTest extends AbstractTestCase
 
     /** @var ViewFlashMessageRenderer */
     protected $viewFlashMessageRenderer;
-    
+
     protected function setUp()
     {
         parent::setUp();
