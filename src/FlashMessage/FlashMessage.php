@@ -4,14 +4,12 @@ namespace Coderello\Laraflash\FlashMessage;
 
 use ArrayAccess;
 use JsonSerializable;
-use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Renderable;
 use Coderello\Laraflash\Exceptions\InvalidDelayException;
 use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
 
-class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Renderable, Htmlable
+class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
 {
     /** @var string|null */
     protected $content;
@@ -30,14 +28,6 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
 
     /** @var array */
     protected $attributes = [];
-
-    /** @var FlashMessageRendererContract */
-    protected $flashMessageRenderer;
-
-    public function __construct(FlashMessageRendererContract $flashMessageRenderer)
-    {
-        $this->flashMessageRenderer = $flashMessageRenderer;
-    }
 
     public function content(?string $content): self
     {
@@ -177,16 +167,6 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
     public function jsonSerialize()
     {
         return $this->toArray();
-    }
-
-    public function toHtml()
-    {
-        return $this->render();
-    }
-
-    public function render()
-    {
-        return $this->flashMessageRenderer->render($this);
     }
 
     public function offsetExists($offset)

@@ -4,15 +4,20 @@ namespace Coderello\Laraflash\Laraflash;
 
 use Coderello\Laraflash\FlashMessage\FlashMessage;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
+use Coderello\Laraflash\FlashMessage\FlashMessageRendererContract as FlashMessageRenderer;
 
 class LaraflashRenderer implements LaraflashRendererContract
 {
+    protected $flashMessageRenderer;
+
     protected $configRepository;
 
     protected $separator;
 
-    public function __construct(ConfigRepository $configRepository)
+    public function __construct(FlashMessageRenderer $flashMessageRenderer, ConfigRepository $configRepository)
     {
+        $this->flashMessageRenderer = $flashMessageRenderer;
+
         $this->configRepository = $configRepository;
     }
 
@@ -30,7 +35,7 @@ class LaraflashRenderer implements LaraflashRendererContract
     {
         return $laraflash->ready()
             ->map(function (FlashMessage $message) {
-                return $message->render();
+                return $this->flashMessageRenderer->render($message);
             })
             ->implode($this->getSeparator());
     }

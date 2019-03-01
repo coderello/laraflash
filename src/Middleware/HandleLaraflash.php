@@ -3,8 +3,8 @@
 namespace Coderello\Laraflash\Middleware;
 
 use Closure;
-use Coderello\Laraflash\Laraflash\Laraflash;
 use Coderello\Laraflash\Laraflash\LaraflashPreparerContract;
+use Illuminate\Container\Container;
 
 class HandleLaraflash
 {
@@ -12,9 +12,9 @@ class HandleLaraflash
 
     protected $laraflashToucher;
 
-    public function __construct(Laraflash $laraflash, LaraflashPreparerContract $laraflashToucher)
+    public function __construct(LaraflashPreparerContract $laraflashToucher)
     {
-        $this->laraflash = $laraflash;
+        $this->laraflash = Container::getInstance()->make('laraflash');
 
         $this->laraflashToucher = $laraflashToucher;
     }

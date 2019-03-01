@@ -9,6 +9,6 @@ class FlashMessageFactory implements FlashMessageFactoryContract
 {
     public function make(): FlashMessage
     {
-        return new FlashMessage(new FlashMessageRenderer);
+        return new FlashMessage;
     }
 }

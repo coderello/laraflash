@@ -5,8 +5,6 @@ namespace Coderello\Laraflash\Tests;
 use Coderello\Laraflash\Exceptions\InvalidDelayException;
 use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
 use Coderello\Laraflash\FlashMessage\FlashMessage;
-use Coderello\Laraflash\Tests\Support\FlashMessageFactory;
-use Coderello\Laraflash\Tests\Support\FlashMessageRenderer;
 use Illuminate\Support\Arr;
 
 class FlashMessageTest extends AbstractTestCase
@@ -18,7 +16,7 @@ class FlashMessageTest extends AbstractTestCase
     {
         parent::setUp();
         
-        $this->flashMessage = (new FlashMessageFactory)->make();
+        $this->flashMessage = new FlashMessage;
     }
 
     protected function getMessageState(array $override = [])
@@ -250,26 +248,6 @@ class FlashMessageTest extends AbstractTestCase
         $this->assertSame(
             Arr::sortRecursive($message->toArray()),
             Arr::sortRecursive($message->jsonSerialize())
-        );
-    }
-
-    public function testToHtmlMethod()
-    {
-        $message = $this->flashMessage;
-
-        $this->assertSame(
-            $message->render(),
-            $message->toHtml()
-        );
-    }
-
-    public function testRenderMethod()
-    {
-        $message = $this->flashMessage;
-
-        $this->assertSame(
-            FlashMessageRenderer::RESULT,
-            $message->render()
         );
     }
 

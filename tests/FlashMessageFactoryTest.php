@@ -4,7 +4,6 @@ namespace Coderello\Laraflash\Tests;
 
 use Coderello\Laraflash\FlashMessage\FlashMessage;
 use Coderello\Laraflash\FlashMessage\FlashMessageFactory;
-use Coderello\Laraflash\Tests\Support\FlashMessageRenderer;
 
 class FlashMessageFactoryTest extends AbstractTestCase
 {
@@ -20,7 +19,7 @@ class FlashMessageFactoryTest extends AbstractTestCase
 
     public function testMakeMethod()
     {
-        $message = (new FlashMessage(new FlashMessageRenderer))->info();
+        $message = (new FlashMessage)->info();
 
         $this->app->instance(FlashMessage::class, $message);
 

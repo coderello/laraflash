@@ -32,6 +32,7 @@ class LaraflashRendererTest extends AbstractTestCase
         $this->flashMessageRenderer = new FlashMessageRenderer;
 
         $this->laraflashRenderer = new LaraflashRenderer(
+            $this->flashMessageRenderer,
             $this->configRepository
         );
 

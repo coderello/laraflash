@@ -60,7 +60,7 @@ class ViewFlashMessageRendererTest extends AbstractTestCase
         $this->expectException(SkinNotFoundException::class);
 
         $this->viewFlashMessageRenderer->render(
-            new FlashMessage($this->viewFlashMessageRenderer)
+            new FlashMessage
         );
     }
 
@@ -69,7 +69,7 @@ class ViewFlashMessageRendererTest extends AbstractTestCase
         $this->viewFactory->exists = true;
 
         $content = $this->viewFlashMessageRenderer->render(
-            new FlashMessage($this->viewFlashMessageRenderer)
+            new FlashMessage
         );
 
         $this->assertSame(ViewFactory::MADE_CONTENT, $content);
