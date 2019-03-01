@@ -2,8 +2,8 @@
 
 namespace Coderello\Laraflash\Tests;
 
-use Coderello\Laraflash\MessagesStorage\ArrayMessagesStorage;
 use Coderello\Laraflash\Tests\Support\FlashMessageFactory;
+use Coderello\Laraflash\MessagesStorage\ArrayMessagesStorage;
 
 class ArrayMessagesStorageTest extends AbstractTestCase
 {
@@ -12,7 +12,7 @@ class ArrayMessagesStorageTest extends AbstractTestCase
 
     /** @var FlashMessageFactory */
     protected $flashMessageFactory;
-    
+
     protected function setUp()
     {
         parent::setUp();

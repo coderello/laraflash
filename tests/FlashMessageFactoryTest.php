@@ -9,11 +9,11 @@ class FlashMessageFactoryTest extends AbstractTestCase
 {
     /** @var FlashMessageFactory */
     protected $flashMessageFactory;
-    
+
     protected function setUp()
     {
         parent::setUp();
-        
+
         $this->flashMessageFactory = new FlashMessageFactory;
     }
 
