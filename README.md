@@ -108,9 +108,108 @@ Here is the result:
 
 > You can use array representation of flash messages for your API.
 
-## `FlashMessage` methods
 
 ## `Laraflash` instance
+
+#### `message(?string $content = null, ?string $title = null, ?string $type = null, ?int $delay = null, ?int $hops = null): FlashMessage`
+
+Creates and returns fresh `FlashMessage` instance.
+
+#### `render()`
+
+Renders ready flash messages as HTML.
+
+#### `keep(): self`
+
+Adds one more hop to each flash message.
+
+#### `clear(): self`
+
+Deletes all flash messages.
+
+#### `all(): Collection`
+
+Returns the `Collection` instance containing all flash messages.
+
+#### `ready(): Collection`
+
+Returns the `Collection` instance containing ready flash messages.
+
+#### `touch(): self`
+
+Touches all flash messages (decrements amount of hops and delay, deletes expired messages).
+
+#### `toArray()`
+
+Returns an array representation of ready flash messages.
+
+#### `toJson()`
+
+Returns JSON representation of ready flash messages.
+
+## `FlashMessage` methods
+
+#### `content(?string $content): self`
+
+Sets the content of the flash message.
+
+#### `title(?string $title): self`
+
+Sets the title of the flash message.
+
+#### `type(?string $type): self`
+
+Sets the type of the flash message.
+
+#### `danger(): self`
+
+Sets the `danger` type for the flash message.
+
+#### `warning(): self`
+
+Sets the `warning` type for the flash message.
+
+#### `info(): self`
+
+Sets the `info` type for the flash message.
+
+#### `success(): self`
+
+Sets the `success` type for the flash message.
+
+#### `hops(int $hops): self`
+
+Sets the hops amount of the message (the number of requests in which the message will be present).
+> Default: 1
+
+#### `delay(int $delay): self`
+
+Sets the delay of the message (the number of requests in which the message will be waiting to receive the ready state).
+> Default: 1
+
+#### `now(): self`
+
+Shortcut for `->delay(0)`
+
+#### `keep(): self`
+
+Increments the amount of hops.
+
+#### `attribute(string $key, $value = null): self`
+
+Sets the custom attribute which will be present in the array representation of the message and could be obtained using the `get()` method.
+
+#### `get(string $key)`
+
+Returns the value of the attribute.
+
+#### `toArray()`
+
+Returns an array representation of the message.
+
+#### `toJson()`
+
+Returns JSON representation of the message.
 
 ## Testing
 
