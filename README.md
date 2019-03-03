@@ -109,7 +109,7 @@ Here is the result:
 > You can use array representation of flash messages for your API.
 
 
-## `Laraflash` instance
+## `Laraflash` methods
 
 #### `message(?string $content = null, ?string $title = null, ?string $type = null, ?int $delay = null, ?int $hops = null): FlashMessage`
 
