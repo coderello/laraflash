@@ -15,10 +15,10 @@
 You can install this package via composer using this command:
 
 ```bash
-composer require coderello/laraflash
+composer require coderello/laraflash 
 ```
 
-The package will automatically register itself.
+After that you need to register the `\Coderello\Laraflash\Middleware\HandleLaraflash::class` middleware after the `\Illuminate\Session\Middleware\StartSession::class` one in the `app\Http\Kernel.php`
 
 You can publish the config file with:
 
@@ -26,32 +26,47 @@ You can publish the config file with:
 php artisan vendor:publish --tag="laraflash-config"
 ```
 
-## Few examples of typical use
+## Adding flash messages
 
-### Adding the messages
+There are many syntax variations for adding flash messages, so you can choose the one you like the most.
 
-You can add the flash message this way:
-
-```php
-laraflash('You have been registered successfully.')->success();
-```
-
-Of course, you are not limited to only one message. You can add any amount of messages.
-
-The message added in the previous example will be available during the next request.
-If you want your message to be ready during the current request, then you should chain the `->now()` method.
+Let's take a look at some of them.
 
 ```php
-laraflash('Instant message.')->danger()->now();
+use Coderello\Laraflash\Facades\Laraflash;
+
+Laraflash::message()->content('Some content')->title('Some title')->type('success');
 ```
 
-### Render ready messages as HTML
+> `message()` method creates and returns fresh `FlashMessage` instance which can be modified by chaining methods (all methods could be found in the `FlashMessage methods` section).
 
-It's pretty easy to render messages as HTML. You just need to call `->render()` method on the `Laraflash` instance that is returned by the `laraflash()` helper.
+```php
+laraflash()->message()->content('Some content')->title('Some title')->type('success');
+```
+
+> `Laraflash` facade can be replaced with the `laraflsh()` helper as you could saw in the example above.
+
+```php
+laraflash()->message('Some content', 'Some title')->success();
+```
+
+> `message()` method accepts up to five arguments: `$content`, `$title`, `$type`, `$delay`, `$hops`.
+
+```php
+laraflash('Some content', 'Some title')->success();
+```
+
+> Arguments mentioned in the previous example can be passed directly to the `laraflash()` helper.
+
+## Rendering flash messages
+
+Ready flash messages could be rendered using the `render()` method of the `Laraflash` instance.
 
 ```php
 laraflash()->render();
 ```
+
+> All methods of the `Laraflash` instance (which could be obtained by calling `laraflash()` helper without arguments being passed) could be found in the `Laraflash methods` section.
 
 > Output HTML will be generated using skin, specified in the `laraflash.skin` config. All available skins are listed in the config file.
 
@@ -69,9 +84,9 @@ Example of messages rendered as HTML:
 
 ![Example](example.png)
 
-### Getting ready messages as an array
+## Obtaining flash messages as an array
 
-You can get ready messages as an array this way:
+Flash messages can be obtained as an array using the `toArray()` method.
 
 ```php
 laraflash()->toArray();
@@ -90,6 +105,12 @@ Here is the result:
   ],
 ]
 ```
+
+> You can use array representation of flash messages for your API.
+
+## `FlashMessage` methods
+
+## `Laraflash` instance
 
 ## Testing
 
