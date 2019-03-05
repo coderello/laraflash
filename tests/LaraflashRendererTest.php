@@ -23,7 +23,7 @@ class LaraflashRendererTest extends AbstractTestCase
     /** @var Laraflash */
     protected $laraflash;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

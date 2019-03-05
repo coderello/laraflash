@@ -19,7 +19,7 @@ class ViewFlashMessageRendererTest extends AbstractTestCase
     /** @var ViewFlashMessageRenderer */
     protected $viewFlashMessageRenderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

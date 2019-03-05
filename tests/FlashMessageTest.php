@@ -12,7 +12,7 @@ class FlashMessageTest extends AbstractTestCase
     /** @var FlashMessage */
     protected $flashMessage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
