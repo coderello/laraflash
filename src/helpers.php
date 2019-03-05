@@ -1,13 +1,17 @@
 <?php
 
-use Coderello\Laraflash\Contracts\FlashMessagesBag;
+use Illuminate\Container\Container;
 
 if (! function_exists('laraflash')) {
-    /**
-     * @return FlashMessagesBag
-     */
-    function laraflash(): FlashMessagesBag
+    function laraflash(...$args)
     {
-        return app('laraflash.bag');
+        /** @var \Coderello\Laraflash\Laraflash\Laraflash $laraflash */
+        $laraflash = Container::getInstance()->make('laraflash');
+
+        if ($args) {
+            return $laraflash->message(...$args);
+        }
+
+        return $laraflash;
     }
 }

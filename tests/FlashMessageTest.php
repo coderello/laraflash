@@ -2,251 +2,349 @@
 
 namespace Coderello\Laraflash\Tests;
 
-use Coderello\Laraflash\FlashMessage;
+use Illuminate\Support\Arr;
+use Coderello\Laraflash\FlashMessage\FlashMessage;
 use Coderello\Laraflash\Exceptions\InvalidDelayException;
-use Coderello\Laraflash\Exceptions\InvalidArgumentException;
 use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
-use Coderello\Laraflash\Contracts\FlashMessage as FlashMessageContract;
 
 class FlashMessageTest extends AbstractTestCase
 {
-    public function test_implements_contract()
+    /** @var FlashMessage */
+    protected $flashMessage;
+
+    protected function setUp()
     {
-        $this->assertTrue(new FlashMessage instanceof FlashMessageContract);
+        parent::setUp();
+
+        $this->flashMessage = new FlashMessage;
     }
 
-    public function test_initial_state()
+    protected function getMessageState(array $override = [])
     {
-        $message = new FlashMessage();
-        $messageValues = $message->toArray();
+        $initialState = [
+            'content' => null,
+            'title' => null,
+            'type' => null,
+            'hops' => 1,
+            'delay' => 1,
+        ];
 
-        $this->assertEquals(null, $messageValues['title']);
-        $this->assertEquals(null, $messageValues['content']);
-        $this->assertEquals(null, $messageValues['type']);
-        $this->assertEquals(1, $messageValues['hops']);
-        $this->assertEquals(1, $messageValues['delay']);
-        $this->assertEquals(false, $messageValues['important']);
+        return array_merge($initialState, $override);
     }
 
-    public function test_title_method()
+    public function testInitialState()
     {
-        $message = new FlashMessage();
-        $message->title('hello');
-        $messageValues = $message->toArray();
+        $expected = $this->getMessageState();
 
-        $this->assertEquals('hello', $messageValues['title']);
+        $actual = $this->flashMessage->toArray();
+
+        $this->assertSame(
+            Arr::sortRecursive($expected),
+            Arr::sortRecursive($actual)
+        );
     }
 
-    public function test_content_method()
+    public function testContentMethod()
     {
-        $message = new FlashMessage();
-        $message->content('hello');
-        $messageValues = $message->toArray();
+        $message = $this->flashMessage
+            ->content('foo');
 
-        $this->assertEquals('hello', $messageValues['content']);
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState(['content' => 'foo'])),
+            Arr::sortRecursive($message->toArray())
+        );
     }
 
-    public function test_type_method()
+    public function testTitleMethod()
     {
-        $message = new FlashMessage();
-        $message->type('hello');
-        $messageValues = $message->toArray();
+        $message = $this->flashMessage
+            ->title('foo');
 
-        $this->assertEquals('hello', $messageValues['type']);
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState(['title' => 'foo'])),
+            Arr::sortRecursive($message->toArray())
+        );
     }
 
-    public function test_hops_method()
+    public function testTypeMethod()
     {
-        $message = new FlashMessage();
-        $message->hops(2);
-        $messageValues = $message->toArray();
+        $message = $this->flashMessage
+            ->type('foo');
 
-        $this->assertEquals(2, $messageValues['hops']);
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState(['type' => 'foo'])),
+            Arr::sortRecursive($message->toArray())
+        );
     }
 
-    public function test_hops_method_with_invalid_argument()
+    public function testDangerMethod()
+    {
+        $message = $this->flashMessage
+            ->danger();
+
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState(['type' => 'danger'])),
+            Arr::sortRecursive($message->toArray())
+        );
+    }
+
+    public function testWarningMethod()
+    {
+        $message = $this->flashMessage
+            ->warning();
+
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState(['type' => 'warning'])),
+            Arr::sortRecursive($message->toArray())
+        );
+    }
+
+    public function testInfoMethod()
+    {
+        $message = $this->flashMessage
+            ->info();
+
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState(['type' => 'info'])),
+            Arr::sortRecursive($message->toArray())
+        );
+    }
+
+    public function testSuccessMethod()
+    {
+        $message = $this->flashMessage
+            ->success();
+
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState(['type' => 'success'])),
+            Arr::sortRecursive($message->toArray())
+        );
+    }
+
+    public function testHopsMethod()
+    {
+        $message = $this->flashMessage
+            ->hops(5);
+
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState(['hops' => 5])),
+            Arr::sortRecursive($message->toArray())
+        );
+    }
+
+    public function testHopsMethodWithInvalidHopsAmount()
     {
         $this->expectException(InvalidHopsAmountException::class);
 
-        $message = new FlashMessage();
-        $message->hops(-1);
+        $this->flashMessage
+            ->hops(0);
     }
 
-    public function test_delay_method()
+    public function testDelayMethod()
     {
-        $message = new FlashMessage();
-        $message->delay(4);
-        $messageValues = $message->toArray();
+        $message = $this->flashMessage
+            ->delay(5);
 
-        $this->assertEquals(4, $messageValues['delay']);
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState(['delay' => 5])),
+            Arr::sortRecursive($message->toArray())
+        );
     }
 
-    public function test_delay_method_with_invalid_argument()
+    public function testDelayMethodWithInvalidDelay()
     {
         $this->expectException(InvalidDelayException::class);
 
-        $message = new FlashMessage();
-        $message->delay(-1);
+        $this->flashMessage
+            ->delay(-1);
     }
 
-    public function test_important_method()
+    public function testNowMethod()
     {
-        $message = new FlashMessage();
+        $message = $this->flashMessage
+            ->delay(5);
 
-        $message->important();
-
-        $this->assertEquals(true, $message['important']);
-
-        $message->important(false);
-
-        $this->assertEquals(false, $message['important']);
-
-        $message->important(true);
-
-        $this->assertEquals(true, $message['important']);
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState(['delay' => 5])),
+            Arr::sortRecursive($message->toArray())
+        );
     }
 
-    public function test_now_method()
+    public function testKeepMethod()
     {
-        $message = new FlashMessage();
-        $message->delay(5)->now();
-        $messageValues = $message->toArray();
-
-        $this->assertEquals(0, $messageValues['delay']);
-    }
-
-    public function test_keep_method()
-    {
-        $message = new FlashMessage();
-        $message->hops(3)->keep();
-        $messageValues = $message->toArray();
-
-        $this->assertEquals(4, $messageValues['hops']);
-    }
-
-    public function test_to_array_method()
-    {
-        $message = new FlashMessage();
-        $message->title('hello')
-            ->content('world')
-            ->type('info')
+        $message = $this->flashMessage
             ->hops(5)
-            ->delay(3)
-            ->important();
+            ->keep();
 
-        $this->assertEquals([
-            'title' => 'hello',
-            'content' => 'world',
-            'type' => 'info',
-            'hops' => 5,
-            'delay' => 3,
-            'important' => true,
-        ], $message->toArray());
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState(['hops' => 6])),
+            Arr::sortRecursive($message->toArray())
+        );
     }
 
-    public function test_offset_exists_method()
+    public function testAttributeMethodWithNonNullValue()
     {
-        $message = new FlashMessage();
+        $message = $this->flashMessage
+            ->attribute('foo', 'bar');
 
-        $this->assertTrue($message->offsetExists('title'));
-        $this->assertTrue($message->offsetExists('content'));
-        $this->assertTrue($message->offsetExists('type'));
-        $this->assertTrue($message->offsetExists('hops'));
-        $this->assertTrue($message->offsetExists('delay'));
-        $this->assertFalse($message->offsetExists('fail'));
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState(['foo' => 'bar'])),
+            Arr::sortRecursive($message->toArray())
+        );
     }
 
-    public function test_offset_get_method()
+    public function testAttributeMethodWithNullValue()
     {
-        $message = new FlashMessage();
+        $message = $this->flashMessage
+            ->attribute('foo', 'bar')
+            ->attribute('foo', null);
 
-        $message->title('hello');
-
-        $this->assertEquals('hello', $message['title']);
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState()),
+            Arr::sortRecursive($message->toArray())
+        );
     }
 
-    public function test_offset_get_method_with_invalid_argument()
+    public function testGetMethod()
     {
-        $message = new FlashMessage();
+        $message = $this->flashMessage
+            ->hops(5)
+            ->attribute('foo', 'bar');
 
-        $this->expectException(InvalidArgumentException::class);
-
-        $message->offsetGet('whoops');
+        $this->assertSame(5, $message->get('hops'));
+        $this->assertSame('bar', $message->get('foo'));
+        $this->assertSame(null, $message->get('baz'));
     }
 
-    public function test_offset_set_method()
+    public function testToArrayMethod()
     {
-        $message = new FlashMessage();
+        $message = $this->flashMessage
+            ->attribute('foo', 'bar')
+            ->delay(4);
 
-        $message->offsetSet('title', 'it works');
-
-        $this->assertEquals('it works', $message['title']);
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState([
+                'foo' => 'bar',
+                'delay' => 4,
+            ])),
+            Arr::sortRecursive($message->toArray())
+        );
     }
 
-    public function test_offset_set_method_with_invalid_argument()
+    public function testToJsonMethod()
     {
-        $message = new FlashMessage();
+        $message = $this->flashMessage;
 
-        $this->expectException(InvalidArgumentException::class);
-
-        $message->offsetSet('whoops', 'some value');
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState()),
+            Arr::sortRecursive(json_decode($message->toJson(), true))
+        );
     }
 
-    public function test_offset_unset_method_does_not_affect_message()
+    public function testJsonSerialize()
     {
-        $message = new FlashMessage();
+        $message = $this->flashMessage;
 
-        $message->title('hello');
-
-        $messageValues = $message->toArray();
-
-        unset($message['title']);
-
-        $this->assertSame($messageValues, $message->toArray());
+        $this->assertSame(
+            Arr::sortRecursive($message->toArray()),
+            Arr::sortRecursive($message->jsonSerialize())
+        );
     }
 
-    public function test_json_serialize_method()
+    public function testOffsetExistsMethod()
     {
-        $message = new FlashMessage();
+        $message = $this->flashMessage;
 
-        $message->title('hello');
+        $this->assertFalse($message->offsetExists('foo'));
 
-        $response = $message->jsonSerialize();
+        $message->attribute('foo', 'bar');
 
-        $this->assertEquals('hello', $response['title']);
+        $this->assertTrue($message->offsetExists('foo'));
     }
 
-    public function test_to_json_method()
+    public function testOffsetGetMethod()
     {
-        $message = new FlashMessage();
+        $message = $this->flashMessage
+            ->attribute('foo', 'bar');
 
-        $message->title('hello');
-
-        $response = $message->toJson();
-
-        $this->assertEquals('hello', json_decode($response)->title);
+        $this->assertSame($message->offsetGet('foo'), 'bar');
     }
 
-    public function test_render_method()
+    public function testOffsetGetMethodWithNonexistentAttribute()
     {
-        $message = new FlashMessage();
+        $message = $this->flashMessage;
 
-        $message->title('hello');
+        $this->expectException(\ErrorException::class);
 
-        $message->type('hello');
+        $message->offsetGet('foo');
+    }
 
-        $message->content('hello');
+    public function testOffsetSetMethod()
+    {
+        $message = $this->flashMessage;
 
-        try {
-            $this->assertEquals(
-                view(config('laraflash.skin'), [
-                    'title' => 'hello',
-                    'type' => 'hello',
-                    'content' => 'hello',
-                ])->render(),
-                $message->render()
-            );
-        } catch (\Throwable $e) {
-        }
+        $message['foo'] = 'bar';
+
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState([
+                'foo' => 'bar',
+            ])),
+            Arr::sortRecursive($message->toArray())
+        );
+    }
+
+    public function testOffsetUnsetMethod()
+    {
+        $message = $this->flashMessage
+            ->attribute('foo', 'bar');
+
+        $message->offsetUnset('foo');
+
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState()),
+            Arr::sortRecursive($message->toArray())
+        );
+    }
+
+    public function testMagicGetMethod()
+    {
+        $message = $this->flashMessage
+            ->attribute('foo', 'bar');
+
+        $this->assertSame('bar', $message->__get('foo'));
+        $this->assertSame(null, $message->__get('baz'));
+    }
+
+    public function testMagicSetMethod()
+    {
+        $message = $this->flashMessage;
+
+        $message->__set('foo', 'bar');
+
+        $this->assertSame('bar', $message->__get('foo'));
+    }
+
+    public function testMagicIssetMethod()
+    {
+        $message = $this->flashMessage;
+
+        $this->assertFalse($message->__isset('foo'));
+
+        $message->attribute('foo', 'bar');
+
+        $this->assertTrue($message->__isset('foo'));
+    }
+
+    public function testMagicUnsetMethod()
+    {
+        $message = $this->flashMessage
+            ->attribute('foo', 'bar');
+
+        $message->__unset('foo');
+
+        $this->assertSame(
+            Arr::sortRecursive($this->getMessageState()),
+            Arr::sortRecursive($message->toArray())
+        );
     }
 }

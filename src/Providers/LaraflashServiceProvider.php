@@ -2,14 +2,20 @@
 
 namespace Coderello\Laraflash\Providers;
 
-use Coderello\Laraflash\FlashMessage;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
-use Coderello\Laraflash\FlashMessagesBag;
-use Illuminate\Contracts\Session\Session;
-use Coderello\Laraflash\FlashMessagesBagResolver;
-use Coderello\Laraflash\Contracts\FlashMessage as FlashMessageContract;
-use Coderello\Laraflash\Contracts\FlashMessagesBag as FlashMessagesBagContract;
-use Coderello\Laraflash\Contracts\FlashMessagesBagResolver as FlashMessagesBagResolverContract;
+use Coderello\Laraflash\Laraflash\Laraflash;
+use Coderello\Laraflash\Laraflash\LaraflashPreparer;
+use Coderello\Laraflash\Laraflash\LaraflashRenderer;
+use Coderello\Laraflash\FlashMessage\FlashMessageFactory;
+use Coderello\Laraflash\Laraflash\LaraflashPreparerContract;
+use Coderello\Laraflash\Laraflash\LaraflashRendererContract;
+use Coderello\Laraflash\FlashMessage\ViewFlashMessageRenderer;
+use Coderello\Laraflash\MessagesStorage\MessagesStorageManager;
+use Coderello\Laraflash\MessagesStorage\SessionMessagesStorage;
+use Coderello\Laraflash\MessagesStorage\MessagesStorageContract;
+use Coderello\Laraflash\FlashMessage\FlashMessageFactoryContract;
+use Coderello\Laraflash\FlashMessage\FlashMessageRendererContract;
 
 class LaraflashServiceProvider extends ServiceProvider
 {
@@ -20,15 +26,9 @@ class LaraflashServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/../../resources/views/components/skins', 'laraflash_skin');
+        $this->registerResources();
 
-        $this->publishes([
-            __DIR__.'/../../resources/views' => resource_path('views/vendor/laraflash'),
-        ], 'laraflash-views');
-
-        $this->publishes([
-            __DIR__.'/../../config/laraflash.php' => config_path('laraflash.php'),
-        ], 'laraflash-config');
+        $this->offerPublishing();
     }
 
     /**
@@ -38,31 +38,77 @@ class LaraflashServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(FlashMessagesBagContract::class, FlashMessagesBag::class);
+        $this->registerBindings();
 
-        $this->app->bind(FlashMessageContract::class, FlashMessage::class);
+        $this->configure();
+    }
 
-        $this->app->resolving(FlashMessageContract::class, function (FlashMessageContract $message) {
-            foreach ((array) config('laraflash.defaults') as $key => $value) {
-                if (! is_null($value)) {
-                    $message[$key] = $value;
-                }
-            }
+    /**
+     * Register the Laraflash bindings.
+     *
+     * @return void
+     */
+    protected function registerBindings()
+    {
+        $this->app->bind(MessagesStorageContract::class, SessionMessagesStorage::class);
+
+        $this->app->bind(LaraflashRendererContract::class, LaraflashRenderer::class);
+
+        $this->app->bind(FlashMessageRendererContract::class, ViewFlashMessageRenderer::class);
+
+        $this->app->bind(LaraflashPreparerContract::class, LaraflashPreparer::class);
+
+        $this->app->bind(FlashMessageFactoryContract::class, FlashMessageFactory::class);
+
+        $this->app->singleton(MessagesStorageManager::class, function (Application $app) {
+            return new MessagesStorageManager($app);
         });
 
-        $this->app->bind(FlashMessagesBagResolverContract::class, FlashMessagesBagResolver::class);
+        $this->app->bind(MessagesStorageContract::class, function (Application $app) {
+            /** @var MessagesStorageManager $messagesStorageManager */
+            $messagesStorageManager = $app->make(MessagesStorageManager::class);
 
-        $this->app->singleton('laraflash.bag', function () {
-            return $this->app->make(FlashMessagesBagResolverContract::class, [
-                'session' => $this->app->make(Session::class),
-                'sessionKey' => 'flash_messages_bag',
-            ])->bag();
+            return $messagesStorageManager->driver();
         });
 
-        $this->app->resolving('laraflash.bag', function (FlashMessagesBagContract $bag) {
-            $bag->prepare();
+        $this->app->singleton('laraflash', function (Application $app) {
+            return $app->make(Laraflash::class);
         });
+    }
 
+    /**
+     * Setup the resource publishing groups for Laraflash.
+     *
+     * @return void
+     */
+    protected function offerPublishing()
+    {
+        $this->publishes([
+            __DIR__.'/../../resources/views' => $this->app->resourcePath('views/vendor/laraflash'),
+        ], 'laraflash-views');
+
+        $this->publishes([
+            __DIR__.'/../../config/laraflash.php' => $this->app->configPath('laraflash.php'),
+        ], 'laraflash-config');
+    }
+
+    /**
+     * Register the Laraflash resources.
+     *
+     * @return void
+     */
+    protected function registerResources()
+    {
+        $this->loadViewsFrom(__DIR__.'/../../resources/views/components/skins', 'laraflash_skin');
+    }
+
+    /**
+     * Setup the configuration for Laraflash.
+     *
+     * @return void
+     */
+    protected function configure()
+    {
         $this->mergeConfigFrom(
             __DIR__.'/../../config/laraflash.php',
             'laraflash'

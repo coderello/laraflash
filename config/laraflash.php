@@ -35,24 +35,16 @@ return [
     | This value is the separator between the flash messages.
     |
     */
-
     'separator' => '<br>',
 
     /*
     |--------------------------------------------------------------------------
-    | Default Values For The Flash Message
+    | Messages Storage
     |--------------------------------------------------------------------------
     |
-    | This value is an array with default values for the flash message.
+    | Drivers: "session", "array"
     |
     */
-    'defaults' => [
-        // 'title' => 'Default title',
-        // 'content' => 'Default content',
-        'type' => 'info',
-        'hops' => 1,
-        'delay' => 1,
-        'important' => false,
-    ],
+    'messages_storage' => 'session',
 
 ];

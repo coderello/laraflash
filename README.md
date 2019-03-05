@@ -1,4 +1,4 @@
-<p align="center"><img alt="Laraflash" src="logo.png" width="380"></p>
+<p align="center"><img alt="Laraflash" src="https://i.imgur.com/qo7MxeN.png" width="380"></p>
 
 <p align="center"><b>Laraflash</b> provides a handy way to work with the flash messages.</p>
 
@@ -10,15 +10,15 @@
   <a href="https://scrutinizer-ci.com/g/coderello/laraflash/code-structure"><img src="https://img.shields.io/scrutinizer/coverage/g/coderello/laraflash.svg?style=flat-square" alt="Coverage Status"></a>
 </p>
 
-## Installation
+## Install
 
 You can install this package via composer using this command:
 
 ```bash
-composer require coderello/laraflash
+composer require coderello/laraflash 
 ```
 
-The package will automatically register itself.
+After that you need to register the `\Coderello\Laraflash\Middleware\HandleLaraflash::class` middleware after the `\Illuminate\Session\Middleware\StartSession::class` one in the `app\Http\Kernel.php`
 
 You can publish the config file with:
 
@@ -26,45 +26,50 @@ You can publish the config file with:
 php artisan vendor:publish --tag="laraflash-config"
 ```
 
-## Few examples of typical use
+## Adding flash messages
 
-### Adding the messages
+There are many syntax variations for adding flash messages, so you can choose the one you like the most.
 
-You can add the flash message this way:
-
-```php
-laraflash()
-  ->add()
-  ->content('You have been registered successfully.')
-  ->type('success')
-  ->important();
-```
-
-> You are calling the `->add()` method (that returns the new `FlashMessage` instance) on the `FlashMessagesBag` instance (that is returned by the `laraflash()` helper). All subsequent chained methods are called on the `FlashMessage` instance.
-
-Of course, you are not limited to only one message. You can add any amount of messages.
-
-The message added in the previous example will be available during the next request.
-If you want your message to be ready during the current request, then you should chain the `->now()` method.
+Let's take a look at some of them.
 
 ```php
-laraflash()
-  ->add()
-  ->content('Instant message.')
-  ->type('danger')
-  ->now();
+use Coderello\Laraflash\Facades\Laraflash;
+
+Laraflash::message()->content('Some content')->title('Some title')->type('success');
 ```
 
-> Be sure to examine all available methods of the `FlashMessage` instance. They are listed below in the `FlashMessage methods` section.
+> `message()` method creates and returns fresh `FlashMessage` instance which can be modified by chaining methods (all methods could be found in the `FlashMessage methods` section).
 
-### Render ready messages as HTML
+```php
+laraflash()->message()->content('Some content')->title('Some title')->type('success');
+```
 
-It's pretty easy to render messages as HTML. You just need to call `->render()` method on the `FlashMessagesBag` instance that is returned by the `laraflash()` helper.
+> `Laraflash` facade can be replaced with the `laraflsh()` helper as you could saw in the example above.
+
+```php
+laraflash()->message('Some content', 'Some title')->success();
+```
+
+> `message()` method accepts up to five arguments: `$content`, `$title`, `$type`, `$delay`, `$hops`.
+
+```php
+laraflash('Some content', 'Some title')->success();
+```
+
+> Arguments mentioned in the previous example can be passed directly to the `laraflash()` helper.
+
+## Rendering flash messages
+
+Ready flash messages could be rendered using the `render()` method of the `Laraflash` instance.
 
 ```php
 laraflash()->render();
 ```
+
+> All methods of the `Laraflash` instance (which could be obtained by calling `laraflash()` helper without arguments being passed) could be found in the `Laraflash methods` section.
+
 > Output HTML will be generated using skin, specified in the `laraflash.skin` config. All available skins are listed in the config file.
+
 ```html
 <div class="alert alert-danger" role="alert">
    Danger message.
@@ -79,9 +84,9 @@ Example of messages rendered as HTML:
 
 ![Example](example.png)
 
-### Getting ready messages as an array
+## Obtaining flash messages as an array
 
-You can get ready messages as an array this way:
+Flash messages can be obtained as an array using the `toArray()` method.
 
 ```php
 laraflash()->toArray();
@@ -97,100 +102,114 @@ Here is the result:
     "type" => "danger",
     "hops" => 1,
     "delay" => 0,
-    "important" => false,
   ],
 ]
-
 ```
 
-> Be sure to examine all available methods of the `FlashMessagesBag` instance. They are listed below in the `FlashMessagesBag methods` section.
+> You can use array representation of flash messages for your API.
 
-## `FlashMessagesBag` methods
 
-#### add(?FlashMessage $message = null)
+## `Laraflash` methods
 
-Creates new `FlashMessage` instance or takes an existing one as the first param and adds it to the messages bag.
+#### `message(?string $content = null, ?string $title = null, ?string $type = null, ?int $delay = null, ?int $hops = null): FlashMessage`
 
-#### clear()
+Creates and returns fresh `FlashMessage` instance.
 
-Deletes all messages from the bag.
+#### `render()`
 
-#### keep()
+Renders ready flash messages as HTML.
 
-Adds one more hop to each message in the bag.
+#### `keep(): self`
 
-#### all()
+Adds one more hop to each flash message.
 
-Returns all `FlashMessage` instances from the bag.
+#### `clear(): self`
 
-#### ready()
+Deletes all flash messages.
 
-Returns ready `FlashMessage` instances (with `delay` equals to zero) from the bag.
+#### `all(): Collection`
 
-#### prepare()
+Returns the `Collection` instance containing all flash messages.
 
-Prepares the bag (decrements amount of hops and delay, deletes expired messages).
+#### `ready(): Collection`
 
-#### render()
+Returns the `Collection` instance containing ready flash messages.
 
-Renders the bag as HTML (calls the `->render()` method on each item of the bag and joins all rendered messages using the value of the `laraflash.separator` config as the separator). 
+#### `touch(): self`
 
-#### toJson()
+Touches all flash messages (decrements amount of hops and delay, deletes expired messages).
 
-Converts the bag to its JSON representation.
+#### `toArray()`
 
-#### toArray()
+Returns an array representation of ready flash messages.
 
-Converts the bag to its array representation.
+#### `toJson()`
+
+Returns JSON representation of ready flash messages.
 
 ## `FlashMessage` methods
 
-#### title(string $title)
+#### `content(?string $content): self`
 
-Sets the title of the message.
+Sets the content of the flash message.
 
-#### content(string $content)
+#### `title(?string $title): self`
 
-Sets the content of the message.
+Sets the title of the flash message.
 
-#### type(string $type)
+#### `type(?string $type): self`
 
-Sets the type of the message.
+Sets the type of the flash message.
 
-#### hops(int $hops)
+#### `danger(): self`
+
+Sets the `danger` type for the flash message.
+
+#### `warning(): self`
+
+Sets the `warning` type for the flash message.
+
+#### `info(): self`
+
+Sets the `info` type for the flash message.
+
+#### `success(): self`
+
+Sets the `success` type for the flash message.
+
+#### `hops(int $hops): self`
 
 Sets the hops amount of the message (the number of requests in which the message will be present).
 > Default: 1
 
-#### delay(int $delay)
+#### `delay(int $delay): self`
 
 Sets the delay of the message (the number of requests in which the message will be waiting to receive the ready state).
 > Default: 1
 
-#### important(bool $important = true)
-
-Sets the `important` flag for the message.
-> Default: false
-
-#### now()
+#### `now(): self`
 
 Shortcut for `->delay(0)`
 
-#### keep()
+#### `keep(): self`
 
 Increments the amount of hops.
 
-#### render()
+#### `attribute(string $key, $value = null): self`
 
-Renders the message as HTML using the value of the `laraflash.skin` config as the skin.
+Sets the custom attribute which will be present in the array representation of the message and could be obtained using the `get()` method.
 
-#### toJson()
+#### `get(string $key)`
 
-Converts the message to its JSON representation.
+Returns the value of the attribute.
 
-#### toArray()
+#### `toArray()`
 
-Converts the message to its array representation.
+Returns an array representation of the message.
+
+#### `toJson()`
+
+Returns JSON representation of the message.
 
 ## Testing
 

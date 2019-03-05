@@ -6,6 +6,6 @@ class InvalidHopsAmountException extends InvalidArgumentException
 {
     public function __construct()
     {
-        parent::__construct('Invalid hops amount.');
+        $this->message = 'Invalid hops amount.';
     }
 }
