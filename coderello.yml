@@ -2,5 +2,5 @@ site:
   show: true
   title: 'Laraflash',
   description: 'Flash messages on steroids.'
-  package_repository: 'packagist',
+  package_repository: 'packagist'
   package_name: 'coderello/laraflash'
