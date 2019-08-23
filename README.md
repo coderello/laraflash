@@ -10,7 +10,7 @@
   <a href="https://scrutinizer-ci.com/g/coderello/laraflash/code-structure"><img src="https://img.shields.io/scrutinizer/coverage/g/coderello/laraflash.svg?style=flat-square" alt="Coverage Status"></a>
 </p>
 
-## Install
+## Installation
 
 You can install this package via composer using this command:
 
