@@ -14,6 +14,8 @@ composer require coderello/laraflash
 
 After that you need to register the `\Coderello\Laraflash\Middleware\HandleLaraflash::class` middleware after the `\Illuminate\Session\Middleware\StartSession::class` one in the `app\Http\Kernel.php`
 
+> {danger} Package will not work properly without the middleware registration.
+
 ## Publishing the config
 
 You can publish the config file with:
