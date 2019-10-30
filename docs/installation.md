@@ -16,7 +16,7 @@ After that you need to register the `\Coderello\Laraflash\Middleware\HandleLaraf
 
 > {danger} Package will not work properly without the middleware registration.
 
-## Publishing the config
+## Publishing the config.
 
 You can publish the config file with:
 
