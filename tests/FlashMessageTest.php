@@ -2,10 +2,10 @@
 
 namespace Coderello\Laraflash\Tests;
 
-use Illuminate\Support\Arr;
-use Coderello\Laraflash\FlashMessage\FlashMessage;
 use Coderello\Laraflash\Exceptions\InvalidDelayException;
 use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
+use Coderello\Laraflash\FlashMessage\FlashMessage;
+use Illuminate\Support\Arr;
 
 class FlashMessageTest extends AbstractTestCase
 {

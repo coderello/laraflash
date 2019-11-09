@@ -3,11 +3,11 @@
 namespace Coderello\Laraflash\FlashMessage;
 
 use ArrayAccess;
-use JsonSerializable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Contracts\Support\Arrayable;
 use Coderello\Laraflash\Exceptions\InvalidDelayException;
 use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
+use JsonSerializable;
 
 class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
 {
