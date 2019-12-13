@@ -1,7 +1,8 @@
 ---
 title: Installation
 section: Getting Started
-weight: 100
+weight: 1000
+featherIcon: download
 ---
 
 ## Basic installation
