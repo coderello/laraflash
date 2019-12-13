@@ -3,8 +3,8 @@
 namespace Coderello\Laraflash\Laraflash;
 
 use Coderello\Laraflash\FlashMessage\FlashMessage;
-use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Coderello\Laraflash\FlashMessage\FlashMessageRendererContract as FlashMessageRenderer;
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
 
 class LaraflashRenderer implements LaraflashRendererContract
 {

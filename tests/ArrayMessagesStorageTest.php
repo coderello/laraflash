@@ -2,8 +2,8 @@
 
 namespace Coderello\Laraflash\Tests;
 
-use Coderello\Laraflash\Tests\Support\FlashMessageFactory;
 use Coderello\Laraflash\MessagesStorage\ArrayMessagesStorage;
+use Coderello\Laraflash\Tests\Support\FlashMessageFactory;
 
 class ArrayMessagesStorageTest extends AbstractTestCase
 {
