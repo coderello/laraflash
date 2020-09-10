@@ -8,16 +8,16 @@ class MessagesStorageManager extends Manager
 {
     public function getDefaultDriver()
     {
-        return $this->app['config']['laraflash.messages_storage'];
+        return $this->container['config']['laraflash.messages_storage'];
     }
 
     public function createSessionDriver()
     {
-        return $this->app->make(SessionMessagesStorage::class);
+        return $this->container->make(SessionMessagesStorage::class);
     }
 
     public function createArrayDriver()
     {
-        return $this->app->make(ArrayMessagesStorage::class);
+        return $this->container->make(ArrayMessagesStorage::class);
     }
 }
