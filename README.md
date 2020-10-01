@@ -227,6 +227,6 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-## License
+## 📖 License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+**Larflash** is open-sourced software licensed under the [MIT license](LICENSE.md).
