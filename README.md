@@ -44,7 +44,7 @@ Laraflash::message()->content('Some content')->title('Some title')->type('succes
 laraflash()->message()->content('Some content')->title('Some title')->type('success');
 ```
 
-> `Laraflash` facade can be replaced with the `laraflsh()` helper as you could saw in the example above.
+> `Laraflash` facade can be replaced with the `laraflash()` helper as you could saw in the example above.
 
 ```php
 laraflash()->message('Some content', 'Some title')->success();
