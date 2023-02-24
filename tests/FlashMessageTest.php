@@ -7,7 +7,7 @@ use Coderello\Laraflash\Exceptions\InvalidHopsAmountException;
 use Coderello\Laraflash\FlashMessage\FlashMessage;
 use Illuminate\Support\Arr;
 
-class FlashMessageTest extends AbstractTestCase
+class FlashMessageTest extends TestCase
 {
     /** @var FlashMessage */
     protected $flashMessage;

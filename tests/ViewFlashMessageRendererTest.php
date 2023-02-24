@@ -8,7 +8,7 @@ use Coderello\Laraflash\FlashMessage\ViewFlashMessageRenderer;
 use Coderello\Laraflash\Tests\Support\ViewFactory;
 use Illuminate\Config\Repository as ConfigRepository;
 
-class ViewFlashMessageRendererTest extends AbstractTestCase
+class ViewFlashMessageRendererTest extends TestCase
 {
     /** @var ConfigRepository */
     protected $configRepository;

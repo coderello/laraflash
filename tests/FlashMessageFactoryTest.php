@@ -5,7 +5,7 @@ namespace Coderello\Laraflash\Tests;
 use Coderello\Laraflash\FlashMessage\FlashMessage;
 use Coderello\Laraflash\FlashMessage\FlashMessageFactory;
 
-class FlashMessageFactoryTest extends AbstractTestCase
+class FlashMessageFactoryTest extends TestCase
 {
     /** @var FlashMessageFactory */
     protected $flashMessageFactory;

@@ -9,7 +9,7 @@ use Coderello\Laraflash\Tests\Support\FlashMessageRenderer;
 use Coderello\Laraflash\Tests\Support\MessagesStorage;
 use Illuminate\Config\Repository as ConfigRepository;
 
-class LaraflashRendererTest extends AbstractTestCase
+class LaraflashRendererTest extends TestCase
 {
     /** @var ConfigRepository */
     protected $configRepository;

@@ -6,7 +6,7 @@ use Coderello\Laraflash\MessagesStorage\SessionMessagesStorage;
 use Coderello\Laraflash\Tests\Support\FlashMessageFactory;
 use Illuminate\Contracts\Session\Session;
 
-class SessionMessagesStorageTest extends AbstractTestCase
+class SessionMessagesStorageTest extends TestCase
 {
     /** @var Session */
     protected $session;

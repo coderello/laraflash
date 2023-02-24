@@ -9,7 +9,7 @@ use Coderello\Laraflash\Tests\Support\LaraflashRenderer;
 use Coderello\Laraflash\Tests\Support\MessagesStorage;
 use Illuminate\Support\Facades\Request;
 
-class LaraflashPreparerTest extends AbstractTestCase
+class LaraflashPreparerTest extends TestCase
 {
     /** @var Laraflash */
     protected $laraflash;
