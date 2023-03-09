@@ -7,7 +7,7 @@ use Coderello\Laraflash\Tests\Support\FlashMessageFactory;
 use Coderello\Laraflash\Tests\Support\LaraflashRenderer;
 use Coderello\Laraflash\Tests\Support\MessagesStorage;
 
-class LaraflashTest extends AbstractTestCase
+class LaraflashTest extends TestCase
 {
     /** @var FlashMessageFactory */
     protected $flashMessageFactory;
