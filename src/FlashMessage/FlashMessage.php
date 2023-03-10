@@ -149,7 +149,8 @@ class FlashMessage implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
     public function toArray()
     {
         return array_merge(
-            $this->attributes, [
+            $this->attributes,
+            [
                 'content' => $this->content,
                 'title' => $this->title,
                 'type' => $this->type,
